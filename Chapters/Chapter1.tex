@@ -1,7 +1,7 @@
 % Introduction
 
 \chapter{Introduction}
-\label{Chapter1}
+\label{ch:introduction} % Introduction
 
 % Explain the motivation for the work and the current situation:
 % - Background and motivation
@@ -64,20 +64,32 @@ The aim of this dissertation is to get precise control of the displacement for
 a tap water-driven McKibben artificial muscle. To do so, a list of steps will be followed:
 
 \begin{enumerate}
-	\item \textit{Derivation of a Simple Linear Model} \\ Using linear identification
-	techniques, it is possible to map the input pressure to the output displacement,
+	\item \textit{Derivation of a Simple Linear Model} \smallskip \\ 
+	Using linear identification techniques, it is possible to map the input pressure to the output displacement,
 	and get a precise yet simple linear model of the muscle.
 	While in pneumatic artificial muscles it is required to take into account
 	the temperature dynamics and the compressibility of air, using water as the muscle
 	allows to disregard them. This grants a simpler model of the muscle.
 	
-	\item \textit{Introduction of a Hysteresis Component} \\ The linear identification
-	method grants a very simple yet linear model that does not take nonlinearities into account. 
+	\item \textit{Introduction of a Hysteresis Component} \smallskip \\ 
+	The linear identification method grants a very simple yet linear model
+	that does not take nonlinearities into account. 
 	The biggest source of nonlinearity for the McKibben muscle is hysteresis.
 	A hysteresis component is added to the linear model, 
 	so that it will	better follow the actual behaviour of the muscle.
 	This step is essential to get good control performance.
 	
+	\item \textit{Controller Design} \smallskip \\
+	The application of Model Predictive Control and Adaptive Control techniques are
+	proposed, using the muscle model obtained from linear system identification and
+	modified with the introduction of the hysteresis component.
+	these results are confronted with PI and PID control.
+	
+	\item \textit{Adaptive Parameter Estimation} \smallskip \\
+	Model's parameters change according to the load of the muscle
+	and its working conditions. To retain good control performance,
+	an adaptive estimation is needed to update the controller, and achieve
+	perpetual stable results. To do so, a \{Genetic Algorithm\}/\{LS\} approach is proposed.
 \end{enumerate}
 
 

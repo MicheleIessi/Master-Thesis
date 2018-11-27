@@ -2,4 +2,74 @@
 
 \chapter{Modelling of McKibben Artificial Muscles}
 
+In this Chapter, the muscle models used as nominal models for model-based control are derived.
+
+\section{Introduction}
+
+McKibben muscles are actuators used mainly for medical purposes in rehabilitation and welfare. 
+The reason is their high flexibility, light weight, low cost, human and environmental friendliness and ease of use.
+As mentioned in Chapter~\ref{ch:introduction}, the control of this kind of actuators
+is often problematic, due to their inherent high nonlinearity.
+
+Many muscle models have been proposed, both static and dynamic.
+One of the most known static models is derived by Chou~\cite{model_chou},
+which is based on the equilibrium between the input pressure and the release of energy.
+Although the main interest is to obtain the dynamic model to use in control, 
+the static one is also reviewed and evaluated because they are used with feed-forward
+control applied to rehabilitation devices using the McKibben muscle. 
+
+Dynamic muscle models can be categorized in analysis oriented and control oriented.
+Analysis oriented models provide very high accuracy, but they are also very complex.
+For this reason they are not much suitable for control purposes.
+
+Control oriented models provide lower accuracy than analysis oriented ones,
+but their lower complexity allows them to be used more efficiently for control.
+
+%TODO: add existing research on muscle models
+
+Since tap water driven muscles are simpler than pneumatic ones, the idea is to use
+linear system identification and obtain a simple model of the muscle's dynamics.
+Being this only a linear model,
+it does not take into account the presence of strong nonlinearities,
+such as the friction between the braids and the hysteretic behaviour of the muscle.
+However, the introduction of a hysteresis model can lead to achieving higher precision
+with with the model derived from linear system identification.
+
+Through history, several hysteresis models have been developed.
+Notable examples are the Maxwell-slip model~\cite{al2005generalized},
+the Jiles-Atheron model~\cite{lederer1999parameter}
+and the Preisach model~\cite{ge1997generalized}. 
+Common interest points of these models are friction of the braided sleeve,
+and the hysteresis caused by it, which both add nonlinearities to the model.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
