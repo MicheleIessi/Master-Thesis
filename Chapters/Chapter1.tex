@@ -16,7 +16,7 @@ used in some particular applications, such as power assist systems and rehabilit
 they have significant heaviness and rigidity, because of their mechanical structure and
 motorization~\cite{mckibben_tondu}. 
 In this context, it is problematic to share a robot working space with humans around it, 
-and so this kind of actuator cannot be used to actuate orthotics.
+and so this kind of actuator cannot be used to actuate, for example, orthotics.
 
 McKibben muscles were invented by Joseph L. McKibben to motorize pneumatic art orthotics.
 They in general consist of an inner rubber tube enclosed in a braided outer nylon sleeve.
@@ -39,19 +39,46 @@ other actuators.
 
 \section{Modelling of McKibben Artificial Muscle}
 
+As already mentioned, the control of McKibben muscles is not easy to achieve.
+A PID control solution may be developed, but it has flaws:
+the parameters of the controller will have to be tuned different types of muscles
+and for various loads. 
+This is generally not an acceptable solution for this kind of application.
 
+Thus, model-based control techniques are better suitable for this job. The plant model
+needs to be very precise for the control to be effective, and to do so identification techniques are used to get a first linear approximation of the model.
+Later, a hysteresis component is added to this linear model, to keep track of the
+nonlinearities added by the hysteretic behaviour of the muscle.
+Adding a hysteresis component to a linear model makes it more complex, 
+so the choice of an appropriate hysteresis modelling technique is crucial to achieve
+good control performance.
 
+This allows to get a model having good fit with respect to the real one
+and apply a model-based control approach, namely the \textbf{Model Predictive Control} (MPC).
+Further details about the developed controller are in Chapter~\ref{Chapter5},
+and the theory behind MPC can be found in Appendix~\ref{AppendixA}.
 
+\section{Aim of the Study}
 
+The aim of this dissertation is to get precise control of the displacement for
+a tap water-driven McKibben artificial muscle. To do so, a list of steps will be followed:
 
-
-
-
-
-
-
-
-
+\begin{enumerate}
+	\item \textit{Derivation of a Simple Linear Model} \\ Using linear identification
+	techniques, it is possible to map the input pressure to the output displacement,
+	and get a precise yet simple linear model of the muscle.
+	While in pneumatic artificial muscles it is required to take into account
+	the temperature dynamics and the compressibility of air, using water as the muscle
+	allows to disregard them. This grants a simpler model of the muscle.
+	
+	\item \textit{Introduction of a Hysteresis Component} \\ The linear identification
+	method grants a very simple yet linear model that does not take nonlinearities into account. 
+	The biggest source of nonlinearity for the McKibben muscle is hysteresis.
+	A hysteresis component is added to the linear model, 
+	so that it will	better follow the actual behaviour of the muscle.
+	This step is essential to get good control performance.
+	
+\end{enumerate}
 
 
 
