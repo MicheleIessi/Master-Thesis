@@ -1,0 +1,13 @@
+*.log
+*.aux
+*.lof
+*.pdf
+*.run.xml
+*.synctex.gz
+*.toc
+main-blx.bib
+*.bbl
+*.blg
+*.dvi
+*.out
+*.lol
