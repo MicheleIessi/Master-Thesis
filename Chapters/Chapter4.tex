@@ -33,7 +33,7 @@ Being this only a linear model,
 it does not take into account the presence of strong nonlinearities,
 such as the friction between the braids and the hysteretic behaviour of the muscle.
 However, the introduction of a hysteresis model can lead to achieving higher precision
-with with the model derived from linear system identification.
+with the model derived from linear system identification.
 
 Through history, several hysteresis models have been developed.
 Notable examples are the Maxwell-slip model~\cite{al2005generalized},
@@ -42,27 +42,70 @@ and the Preisach model~\cite{ge1997generalized}.
 Common interest points of these models are friction of the braided sleeve,
 and the hysteresis caused by it, which both add nonlinearities to the model.
 
+These hysteresis models are precise, yet complex in structure.
+To overcome this problem, the Bouc-Wen~\cite{bouc}~\cite{bouc_wen} hysteretic model is combined with 
+the identified muscle model. Including the hysteretic model raises the number
+of parameters that have to be identified for the system, but this is easily
+achieved, at first, by trial and error. Later, an adaptive algorithm is developed
+to get the best parameters for the muscle, and thus the updated model can be use
+as a nominal model for model-based control techniques.
+
+The accuracy of the proposed model is compared to experimental results
+by analysing the pressure--displacement characteristics and the hysteresis characteristics.
+Moreover, the effects of changing the load of the muscle are studied,
+because they may have a great impact upon control performances.
+
+\section{Static Model}
 
 
+\section{Introduction}
+The relationship between the axial contraction force and the pressure difference
+amid supply and atmospheric pressure has been reported in different papers~\cite{chou1994static}~\cite{schulte}.
 
+The association is based on the equilibrium between the input work in the McKibben muscle
+(\ie~when the fluid is supplied to the inner rubber tube)
+and the output work (\ie~when the actuator shortens or elongates
+because of the volumetric change associated with the pressure difference).
 
+Figure~\ref{fig:geometric_structure} shows the geometric structure,
+which follows the geometric relationships in Equation~\ref{eq:geom_rel}.
 
+\begin{align}
+	L = b\cos(\gamma), \quad D = \frac{b \sin(\gamma)}{n \pi}
+	\label{fig:geometric_structure}
+\end{align}
+%\begin{figure}[h]
+%	\centering
+%	\begin{tikzpicture}
+%    \draw (0,0) arc (0:180:1.25 and 0.5);
+%    \draw (-2.5,0) -- (-2.5,-3.5);
+%	\end{tikzpicture}
+%	
+%\end{figure}
 
+%TODO: insert muscle figure and braid angle, together with formulas for L and D
 
+\subsection{Static Model of the Muscle}
 
+The input work $W_{in}$ is applied to the muscle when the fluid (liquid or air)
+pushes the internal surface of the rubber tube.
+This can be expressed as the product of the supply pressure and the change in volume.
 
+\begin{align}
+	dW_{in} = \left( P - P_0 \right)dV = P'dV
+	\label{eq:input_work}
+\end{align}
 
+Where $P$ is the supply pressure, $P_0$ is the atmospheric pressure,
+$P'$ is the pressure difference and $dV$ is the volumetric change.
 
+Equation~\ref{eq:muscle_volume} shows the volume of the muscle,
+with the assumption that it has cylindrical shape.
 
-
-
-
-
-
-
-
-
-
+\begin{align}
+	V = \frac{1}{4}\pi L D^2
+	\label{eq:muscle_volume}
+\end{align}
 
 
 
