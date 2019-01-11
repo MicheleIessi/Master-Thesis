@@ -1,6 +1,62 @@
-% Appendix A
 
-\chapter{App A} % Main appendix title
+\lstdefinestyle{mystyle}{
+	numbers=left, 
+	numberstyle=\tiny, 
+	numbersep=8pt, 
+	language=Matlab,
+	label=glabel
+}
 
-\label{AppendixA} 
+\newtcblisting{mylisting}[2][]{
+	colframe=Maroon,
+	arc=0pt, outer arc=0pt,
+	listing only, 
+	listing style=mystyle,
+	title=#2,
+	#1
+}
+
+
+
+\chapter{Scripts and Algorithms} % Main appendix title
+\label{app:algorithms} 
+
+This Appendix contains all scripts and algorithms used for this work.
+
+\section{Scripts}
+
+\subsection{Stair Input Generation}
+
+This script generates the step wave that is to be given as input to the input and output
+proportional valves. Given that they have to be symmetric,
+the wave given to the output valve is defined as follows.
+\begin{align*}
+y' = 10 - y
+\end{align*}
+
+\begin{mylisting}[hbox,enhanced,drop shadow,label={alg:step_input_generation}]{Stair input generation}
+close all
+clc
+step = 1;	% Volts between two consecutive steps
+y = zeros(1,50*10*(1/step));
+for v = 0:step:10
+	y((v*50)*(1/step)+1:(v+step)*(1/step)*50) = v;
+end
+y = [y fliplr(y)];
+y = [y y y y]';
+last = (length(y)-1)/10;
+t = (0:0.1:last)';
+y = [t y];
+\end{mylisting}
+
+
+
+
+
+
+
+
+
+
+
 

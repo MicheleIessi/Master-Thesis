@@ -1,24 +1,134 @@
-% PID - MPC Controller design and comparison
+% Chapter containing details about the hysteresis of the muscle
+% Outline:
+% - Introduction
+% - Evolutionary algorithms outline
+%	- Genetic Algorithm
+% - Multi-variable optimization
+% 	- Firefly Algorithm
+% 	- Modified Firefly Algorithm
+% 	- PSO
+% - Implementation
+% - Results comparison
 
-\chapter{Controller Design}
-\label{Chapter5} 
+\chapter{Hysteresis Parameter Optimization}
+\label{ch:optimization}
 
+In this chapter, the methods to obtain the model's parameters are explained.
+Section~\ref{sec:5.evo} introduces the concept of \textit{evolutionary algorithm},
+with particular regard towards a simple genetic algorithm approach
+with the purpose of optimization.
 
+After that, Section~\ref{sec:5.opt} introduces methods of \textit{multi-variable
+optimization}, with the goal of transforming the search of parameters
+into an optimization problem.
 
+Section~\ref{sec:5.impl} describes the implementation of said algorithms,
+and Section~\ref{sec:5.res} shows the result for each of them.
 
+%{\color{red} 
+%\begin{itemize}
+%	\item Introduzione
+%	\item Algoritmi evoluzionistici
+%	\begin{itemize}
+%		\item Algoritmi genetici
+%	\end{itemize}
+%	\item Ottimizzazione multi variabile
+%	\begin{itemize}
+%		\item Algoritmo firefly
+%		\item Algoritmo firefly modificato
+%		\item Particle Swarm Optimization
+%	\end{itemize}
+%	\item Implementazione
+%	\item Confronto risultati
+%\end{itemize}
+%}
 
+\section{Introduction}
+After having described how to get a discrete model of the McKibben artificial muscle,
+the Bouc-Wen model of hysteresis has been introduced.
+This model proves useful to describe a hysteretic behaviour in a simple manner,
+and can provide great advantages in terms of performance when it comes to control.
 
+However, there are parameters that have to be tuned in order for the model
+to operate correctly. The tuning may be done by trial and error, or the whole process
+may be automated.
 
+The parameter refinement process makes use of an algorithm to
+find the parameters of the Bouc-Wen model that give a best approximation
+of the real experimental data. Such algorithms include, but are not limited to,
+Recursive Least Squares (RLS), evolutionary algorithms
+and multi-variable optimization algorithms.
 
+For this work, different approaches based on evolutionary algorithms
+and multi-variable optimization methods have been tested.
 
+\clearpage
 
+\section{Evolutionary Algorithms}
+\label{sec:5.evo}
 
+An evolutionary algorithm is a population-based optimization algorithm
+that mimics the behaviour of biological evolution, simulating the steps of
+reproduction, mutation, recombination and selection.
 
+Each individual is tested in an optimization problem,
+and the best characteristic of the population are passed through the generations.
+The evaluation of an individual is done by means of a fitness function.
+A fitness function is a operator that assigns a fitness value to each individual.
+Depending on the nature of the problem, individuals with lower (or higher)
+fitness values are judged "better" from the algorithm and have a higher probability
+of being chosen in the mating step to generate new, better individuals.
+Therefore, their characteristics have a higher chance to be passed onto next generations
+in order to iteratively refine the parameters and arrive at a acceptable solution.
 
+After a certain amount of generations, or after one individual reaches
+a fixed fit value, the algorithm stops and the best individual is chosen
+as the solution to the optimization problem.
 
+\subsection{Genetic Algorithm}
 
+A genetic algorithm (GA)~\cite{fleming2001genetic} is a kind of evolutionary algorithm inspired
+by the concept of natural selection that permeates a biological evolutionary process.
 
+Genetic algorithms are a class of stochastic global search algorithm
+operating on a set called \textit{population} of current approximations,
+called \textit{individuals}.
+Individuals are encoded as a set (\textit{chromosome}) of parameters (\textit{genes}).
 
+Once a population has been created, each individual performance is assessed
+according to the objective function characterising the problem that has to be solved.
+
+Algorithms belonging to this class are divided into the following steps:
+
+\begin{itemize}[noitemsep]
+	\item Initialization
+	\item Evaluation
+	\item Crossover
+	\item Mutation
+\end{itemize}
+
+\subsubsection{Initialization Step}
+
+For a Genetic Algorithm, the initialization step consists in the creation
+of the individuals, and by extension that of the population.
+
+One of the most common initialization methods is random initialization:
+each gene of any individual is randomly chosen between a defined interval.
+This gives a higher chance of finding good results from the first generations,
+and refine the solution starting from them.
+
+Another initialization method may be to create a population of equal
+individuals, and mainly rely on mutation for the first generations
+in order to find better approximations. This method, while it may better
+reflect the natural behaviour of a biological evolutionary process,
+takes also a much larger number of generations to return appreciable results.
+
+For this reason, the GA developed for this work makes use of random initialization.
+
+\subsubsection{Evaluation Step}
+
+The evaluation step concerns assessing a fitness value to each individual
+in order to rank them according to their performance in solving the optimization problem.
 
 
 

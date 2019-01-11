@@ -145,7 +145,7 @@ natbib=true % natbib compatibility mode (\citep and \citet still work)
 \newcommand{\myfloatalign}{\centering} % To be used with each float for alignment
 \usepackage{caption}
 \captionsetup{font=small}
-\usepackage{subfig}  
+\usepackage{subfig}
 
 %----------------------------------------------------------------------------------------
 %	CODE LISTINGS SETUP
@@ -263,6 +263,62 @@ pdfproducer={LaTeX with hyperref and classicthesis}
 
 \usepackage{enumitem}
 \usepackage{tikz}
+\usepackage{nicefrac}
+\usepackage{gensymb}
+\usetikzlibrary{calc}
+\usetikzlibrary{intersections}
+\usetikzlibrary{babel}
+\usetikzlibrary{angles}
+\usetikzlibrary{quotes}
 \usetikzlibrary{shapes}
 \usetikzlibrary{arrows.meta}
-\usetikzlibrary{patterns}
+\usetikzlibrary{through,backgrounds,matrix,patterns}
+\usetikzlibrary{decorations,decorations.markings,decorations.text}
+\usepackage{pgfplots}
+\makeatletter
+\tikzset{% customization of pattern 
+	hatch distance/.store in=\hatchdistance,
+	hatch distance=10pt,
+	hatch thickness/.store in=\hatchthickness,
+	hatch thickness=0.3pt
+}
+\pgfdeclarepatternformonly[\hatchdistance,\hatchthickness]{north east hatch}% name
+	{\pgfqpoint{-1pt}{-1pt}}% below left
+	{\pgfqpoint{\hatchdistance}{\hatchdistance}}% above right
+	{\pgfpoint{\hatchdistance-1pt}{\hatchdistance-1pt}}%
+	{
+	\pgfsetcolor{\tikz@pattern@color}
+	\pgfsetlinewidth{\hatchthickness}
+	\pgfpathmoveto{\pgfqpoint{0pt}{0pt}}
+	\pgfpathlineto{\pgfqpoint{\hatchdistance}{\hatchdistance}}
+	\pgfusepath{stroke}
+}
+\pgfdeclarepatternformonly[\hatchdistance,\hatchthickness]{north west hatch}
+	{\pgfqpoint{0pt}{0pt}}
+	{\pgfqpoint{\hatchdistance}{\hatchdistance}}
+	{\pgfpoint{\hatchdistance-1pt}{\hatchdistance-1pt}}%
+	{
+	\pgfsetcolor{\tikz@pattern@color}
+	\pgfsetlinewidth{\hatchthickness}
+	\pgfpathmoveto{\pgfqpoint{\hatchdistance}{0pt}}
+	\pgfpathlineto{\pgfqpoint{0pt}{\hatchdistance}}
+	\pgfusepath{stroke}
+}
+\makeatother
+\pgfarrowsdeclarecombine{|<}{>|}{|}{|}{latex}{latex}
+\def\Dimline[#1][#2][#3][#4]{
+	%\node at (0,0) {"test: #1 - #2 ..."};
+	\begin{scope}[>=latex] % redef arrow for dimension lines
+		\draw[|-|,
+		decoration={markings, % switch on markings
+			mark=at position .5 with {\node at (0,#4) {\normalsize{#3}};},
+		},
+		postaction=decorate] #1 -- #2 ;
+	\end{scope}
+}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{listings,skins}
+\usepackage{float}
+\usepackage{physics}
+\DeclareMathOperator{\sign}{sgn}
