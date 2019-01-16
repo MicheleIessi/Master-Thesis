@@ -112,7 +112,7 @@ which follows the geometric relationships in Equation~\ref{eq:geom_rel_1}.
 			\draw (0,0) coordinate (L) node {}
 				-- (0,4) coordinate (O) node {}
 				-- (2,0) coordinate (R) node {}
-				pic["$\psi$", <->,draw=black, angle eccentricity=1.3, angle radius=1cm]{angle=L--O--R};
+				pic["$\psi$", ->,draw=black, angle eccentricity=1.3, angle radius=1cm]{angle=L--O--R};
 			\draw (0,-0.5) -- (0,0);
 			\draw (0,0) -- (2,0);
 %			\filldraw[] (0,4) circle (1pt);
@@ -249,6 +249,7 @@ by using the Bouc-Wen model of hysteresis.
 % TODO: Aggiungere almeno i dettagli riguardo il rising time del muscolo e il peso utilizzato
 
 \subsection{Identification Experiments}
+\label{sec:4.ide}
 
 For the identification step, a stepwise signal has been generated
 and given to the input and output proportional valves. The two signals are symmetric
@@ -256,6 +257,7 @@ one another, due to the nature of the valves. They range from 0 to 10 Volts,
 and are shown in figure~\ref{fig:input_voltage}. The algorithm for generating the signals
 is in Appendix~\ref{app:algorithms} (Algorithm~\ref{alg:step_input_generation}).
 
+% TODO: immagine sbagliata, devono essere secondi alla -1
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{"Images/stair_input_waves"}
@@ -266,8 +268,6 @@ is in Appendix~\ref{app:algorithms} (Algorithm~\ref{alg:step_input_generation}).
 Figure~\ref{fig:disp_press} shows the pressure and displacement characteristics
 of the muscle with the input just introduced.
 
-
-% TODO: immagine sbagliata, devono essere secondi alla -1
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{"Images/pressure_displacement"}
@@ -546,10 +546,109 @@ The previous sections can be summarized with Equations~\ref{eq:final_class} and~
 The models previously proposed are tested and evaluated to estimate
 the error with respect to experimental data. 
 
+Without taking the Bouc-Wen model into consideration, 
+given experimental input values $p$, using equation~\ref{eq:disc_tf}
+the simulated output $\hat{l}$ with respect the experimental values $l$
+is shown in Figure~\ref{fig:comparison}.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Images/comparison}
+	\caption[Comparison between experimental data and simulated output]{Comparison between experimental data and simulated output}
+	\label{fig:comparison}
+\end{figure}
 
+If the Bouc-Wen model is taken into consideration, then the parameters
+must be fixed appropriately. To get a fairly good fit it is possible to tune
+these parameters by trial and error. Further methods for finding the best sets
+of parameters for the hysteresis model are discussed in Chapter~\ref{ch:optimization}.
 
+\subsection{Classic Bouc-Wen Model Parameters}
 
+\begin{minipage}{0.6\textwidth}
+	\vspace*{-0.25cm}
+	The parameters to be chosen for the classic version of the Bouc-Wen model are
+	$\alpha$, $A$, $\beta$, $\gamma$ and $n$. For this work, $n$ will be fixed at 1
+	for both the classic and generalized version of the hysteresis model.
+	Details about how each parameters alters the shape of the hysteretic loop
+	are in Appendix~\ref{app:bouc-wen}. 
+	
+	The parameters in Table~\ref{tab:classic_param} have been fixed by trial and error.
+	All parameters are adimensional.	
+\end{minipage}
+\hfill
+\begin{minipage}{0.35\textwidth}
+	\vspace*{-0.5cm}
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{@{}cl@{}}
+			\toprule
+			\textbf{Parameter} & \textbf{Value} \\ \midrule
+			$\alpha$           & $0.5$          \\
+			$A$                & $0.9$          \\
+			$\beta$            & $0.002$        \\
+			$\gamma$           & $-0.001$       \\
+			$n$                & $1$            \\ \bottomrule
+		\end{tabular}
+		\caption{Parameters for the Classic Bouc-Wen Model}
+		\label{tab:classic_param}
+	\end{table}
+\end{minipage}
 
+\vspace*{0.5cm}
 
+Given experimental input $p$, the simulated output of the system taking into consideration
+the classic Bouc-Wen model of hysteresis is shown in Figure~\ref{fig:comp_classic}.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Images/comparison_classic}
+	\caption[Comparison between experimental data and simulated output with classic Bouc-Wen model]{Comparison between experimental data and simulated output with classic Bouc-Wen model}
+	\label{fig:comp_classic}
+\end{figure}
+
+\subsection{Generalized Bouc-Wen Model Parameters}
+
+\begin{minipage}[ht]{0.6\textwidth}
+	\vspace*{-2cm}
+	The parameters to be chosen for the generalized version of the Bouc-Wen model
+	are $\alpha$, $A$, $n$, $\beta_1$, \textellipsis, $\beta_6$. 
+	As previously stated, the value of $n$ is fixed to $1$.
+	
+	As for the classic version of the hysteresis model, the parameters
+	in Table~\ref{tab:gener_param} have been selected by trial and error.
+	All parameters are adimensional.
+	
+	Given experimental input $p$, the simulated output of the system
+	after taking into consideration the generalized Bouc-Wen model of hysteresis
+	is shown in Figure~\ref{fig:comp_gener}.
+\end{minipage}
+\hfill
+\begin{minipage}{0.35\textwidth}
+	\vspace*{-0.5cm}
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{@{}cl@{}}
+			\toprule
+			\textbf{Parameter} & \textbf{Value} \\ \midrule
+			$\alpha$           & $0.9$          \\
+			$A$                & $1$          	\\
+			$n$   		       & $1$        	\\
+			$\beta_1$          & $0.01$       	\\
+			$\beta_2$          & $0.005$       	\\
+			$\beta_3$          & $0.1$       	\\
+			$\beta_4$          & $-0.01$       	\\
+			$\beta_5$          & $-0.1$       	\\
+			$\beta_6$          & $0.001$       	\\ \bottomrule
+		\end{tabular}
+		\caption{Parameters for the Generalized Bouc-Wen Model}
+		\label{tab:gener_param}
+	\end{table}
+\end{minipage}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Images/comparison_general}
+	\caption{Comparison between experimental data and simulated output with generalized Bouc-Wen model}
+	\label{fig:comp_gener}
+\end{figure}

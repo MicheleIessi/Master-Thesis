@@ -62,7 +62,7 @@ and multi-variable optimization algorithms.
 For this work, different approaches based on evolutionary algorithms
 and multi-variable optimization methods have been tested.
 
-\clearpage
+%\clearpage
 
 \section{Evolutionary Algorithms}
 \label{sec:5.evo}
@@ -99,17 +99,36 @@ Once a population has been created, each individual performance is assessed
 according to the objective function characterising the problem that has to be solved.
 
 Algorithms belonging to this class are divided into the following steps:
+\textit{initialization}, \textit{evaluation}, \textit{crossover} and \textit{mutation}.
+The description and peculiarities of each step are discussed in Section~\ref{sec:5.steps}.
+The genetic algorithm also makes use of several parameters, which are summarized
+in Table~\ref{tab:ga_params}.
 
-\begin{itemize}[noitemsep]
-	\item Initialization
-	\item Evaluation
-	\item Crossover
-	\item Mutation
-\end{itemize}
+\begin{table}[]
+	\centering
+	\begin{tabularx}{\linewidth}{c X}
+		\toprule
+		\textbf{Parameter} & \textbf{Description} \\ \midrule
+		$pop\_size$        & The population's size, i.e. the number of individuals (candidate solutions) that evolve to find a good approximation. \\
+		$max\_gen$         & The maximum generation. After reaching that stage of evolution, the algorithm stops. \\
+		$d$           	   & The chromosome's dimension, i.e. the number of variables to be optimized by the algorithm. \\
+		$L$           	   & A $d$-dimensional vector containing the lower bounds for each variable. \\
+		$U$				   & A $d$-dimensional vector containing the upper bounds for each variable. \\
+		$p_{cross}$		   & The crossover probability. It controls the chance of inheriting a chromosome from a specific parent with respect to the other. \\
+		$p_{mut}$		   & The mutation probability. \\
+		$m_m$			   & The mutation magnitude, i.e. how much a given chromosome changes in the event of a mutation. \\ \bottomrule
+	\end{tabularx}
+	\caption{Parameters for the genetic algorithm}
+	\label{tab:ga_params}
+\end{table}
 
+\subsection{Algorithm Overview}
+
+\subsection{Algorithm Steps}
+\label{sec:5.steps}
 \subsubsection{Initialization Step}
 
-For a Genetic Algorithm, the initialization step consists in the creation
+For a genetic algorithm, the initialization step consists in the creation
 of the individuals, and by extension that of the population.
 
 One of the most common initialization methods is random initialization:
@@ -125,13 +144,42 @@ takes also a much larger number of generations to return appreciable results.
 
 For this reason, the GA developed for this work makes use of random initialization.
 
+
 \subsubsection{Evaluation Step}
 
 The evaluation step concerns assessing a fitness value to each individual
 in order to rank them according to their performance in solving the optimization problem.
+The fitness value is assigned to each individual by means of a \textit{fitness function}.
 
+Experimental input pressure and output displacement,
+respectively described in Equations~\ref{eq:exp_pres} and~\ref{eq:exp_disp},
+are taken from data acquired by the identification experiments described
+in Section~\ref{sec:4.ide}. 
 
+\begin{align}
+u &= \left[u_1,u_2,\textellipsis,u_k\right] \label{eq:exp_pres} \\
+l &= \left[l_1,l_2,\textellipsis,l_k\right] \label{eq:exp_disp}
+\end{align}
 
+with $k$ representing the number of points 
+for which the experimental data has been sampled.
+
+Each individual is used to perform a specific simulation of the model with its genes
+set as Bouc-Wen hysteresis parameters, using $u$ as input.
+The simulated output displacement $\hat{l}$
+is then compared to the experimental displacement $l$.
+
+The fitness function chosen for this step is described in Equation~\ref{eq:fitness}.
+This function returns the fitness value for the i-th individual of the population.
+
+\begin{align}
+fit(i) = -\frac{1}{\sum_{i=1}^k{\left(l_i-\hat{l}_i\right)^2}}
+\label{eq:fitness}
+\end{align}
+
+Judging from the nature of the fitness function, it is clear that
+individuals with a fitness value close to 0 are better than others,
+as it means that their simulated output is close to experimental data.
 
 
 
