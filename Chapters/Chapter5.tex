@@ -14,6 +14,10 @@
 \label{ch:optimization}
 
 In this chapter, the methods to obtain the model's parameters are explained.
+As shown in Section~\ref{sec:4.eva}, although parameters cherry-picked by trial
+and error proved successful to fit the approximated model onto experimental data,
+a higher grade of precision is desirable for applications demanding high accuracy.
+
 Section~\ref{sec:5.evo} introduces the concept of \textit{evolutionary algorithm},
 with particular regard towards a simple genetic algorithm approach
 with the purpose of optimization.
@@ -100,6 +104,7 @@ according to the objective function characterising the problem that has to be so
 
 Algorithms belonging to this class are divided into the following steps:
 \textit{initialization}, \textit{evaluation}, \textit{crossover} and \textit{mutation}.
+The general outline of the procedure is shown in Algorithm~\ref{alg:ga}.
 The description and peculiarities of each step are discussed in Section~\ref{sec:5.steps}.
 The genetic algorithm also makes use of several parameters, which are summarized
 in Table~\ref{tab:ga_params}.
@@ -109,22 +114,54 @@ in Table~\ref{tab:ga_params}.
 	\begin{tabularx}{\linewidth}{c X}
 		\toprule
 		\textbf{Parameter} & \textbf{Description} \\ \midrule
-		$pop\_size$        & The population's size, i.e. the number of individuals (candidate solutions) that evolve to find a good approximation. \\
-		$max\_gen$         & The maximum generation. After reaching that stage of evolution, the algorithm stops. \\
+		$N$        & The population's size, i.e. the number of individuals (candidate solutions) that evolve to find a good approximation. \\
+		$G$         & The maximum generation. After reaching that stage of evolution, the algorithm stops. \\
 		$d$           	   & The chromosome's dimension, i.e. the number of variables to be optimized by the algorithm. \\
 		$L$           	   & A $d$-dimensional vector containing the lower bounds for each variable. \\
 		$U$				   & A $d$-dimensional vector containing the upper bounds for each variable. \\
-		$p_{cross}$		   & The crossover probability. It controls the chance of inheriting a chromosome from a specific parent with respect to the other. \\
-		$p_{mut}$		   & The mutation probability. \\
+		$P_{cross}$		   & The crossover probability. It controls the chance of inheriting a chromosome from a specific parent with respect to the other. \\
+		$P_{mut}$		   & The mutation probability. \\
 		$m_m$			   & The mutation magnitude, i.e. how much a given chromosome changes in the event of a mutation. \\ \bottomrule
 	\end{tabularx}
 	\caption{Parameters for the genetic algorithm}
 	\label{tab:ga_params}
 \end{table}
 
-\subsection{Algorithm Overview}
+\subsubsection{Algorithm Overview}
 
-\subsection{Algorithm Steps}
+\begin{algorithm}
+	\caption{Genetic algorithm approach} \label{alg:ga}
+	\begin{algorithmic}
+		\Procedure{Genetic Algorithm}{}\newline
+		\textbf{Input:} $N$, $G$, $d$, $L$, $U$, $p_{cross}$, $p_{mut}$, $m_m$\newline
+		\textbf{Output:} \textit{A $d$-dimensional vector, i.e. the candidate solution (individual) with best fit value}
+		\State{\textbf{Initialization:} \textit{generate $N$ $d$-dimensional vectors} $n_i, i \in \left[1,N\right]$}
+		\State{$current\_gen \gets 1$}
+		\While{$current\_gen < G$}
+			\State{\textbf{Evaluation:} \textit{compute the fit value $fit(i)$ for each vector}}
+			\State{\textit{Compute the normalized fit value $fit_n(i)$ for each vector}}
+			\State{$M_p \gets$ \textit{new empty Set}}
+			\While{$\lvert \mathcal M_p \rvert<N$}
+				\State{\textbf{Crossover:} \textit{extract 2 individuals}}
+				\State{\textit{Generate 2 new individuals (offspring)}}
+				\State{\textit{Add the offspring to} $M_P$}
+			\EndWhile{\textbf{end while}}
+			\State{\textbf{Mutation:}}
+			\ForEach{$m \in \mathcal M_p$ }
+				\ForEach{\textit{gene} $m_i, i=1,\textellipsis,d$}
+					\State{\textit{Generate a random value $r$ such that} $0\le r \le 1$}
+					\If{$r\le P_{mut}$}
+						\State{\textit{Mutate the i-th gene with percentage} $\pm m_m\%$}
+					\EndIf
+				\EndFor
+			\EndFor
+		\EndWhile{\textbf{end while}}
+		\State{\textit{Return the individual with best fit value}}
+		\EndProcedure
+	\end{algorithmic}	
+\end{algorithm}
+
+\subsubsection{Algorithm Description}
 \label{sec:5.steps}
 \subsubsection{Initialization Step}
 
@@ -143,6 +180,16 @@ reflect the natural behaviour of a biological evolutionary process,
 takes also a much larger number of generations to return appreciable results.
 
 For this reason, the GA developed for this work makes use of random initialization.
+$N$ $d$-dimensional vectors (individuals) $p$ are created,
+following the constraints in Equation~\ref{eq:constraints}.
+
+\begin{align}
+\begin{cases}
+	p_i = \left[p_{i1},\textellipsis,p_{id}\right] \\
+	L_j \leq p_{ij} \leq U_j, \quad i=1,\textellipsis,N, \quad j=1,\textellipsis,d
+\end{cases}
+\label{eq:constraints}
+\end{align}
 
 
 \subsubsection{Evaluation Step}
@@ -161,8 +208,8 @@ u &= \left[u_1,u_2,\textellipsis,u_k\right] \label{eq:exp_pres} \\
 l &= \left[l_1,l_2,\textellipsis,l_k\right] \label{eq:exp_disp}
 \end{align}
 
-with $k$ representing the number of points 
-for which the experimental data has been sampled.
+with $k$ representing the number of points for which the experimental data
+has been sampled.
 
 Each individual is used to perform a specific simulation of the model with its genes
 set as Bouc-Wen hysteresis parameters, using $u$ as input.
@@ -173,13 +220,326 @@ The fitness function chosen for this step is described in Equation~\ref{eq:fitne
 This function returns the fitness value for the i-th individual of the population.
 
 \begin{align}
-fit(i) = -\frac{1}{\sum_{i=1}^k{\left(l_i-\hat{l}_i\right)^2}}
+fit(i) = \frac{1}{\sum_{i=1}^k{\left(l_i-\hat{l}_i\right)^2}}
 \label{eq:fitness}
 \end{align}
 
 Judging from the nature of the fitness function, it is clear that
 individuals with a fitness value close to 0 are better than others,
 as it means that their simulated output is close to experimental data.
+
+After that, the fit value of each individual is normalized in order to be used
+for the crossover step. To do so, each fit value is divided by the sum of all fit values,
+as shown in Equation~\ref{eq:fit_norm}.
+
+\begin{align}
+fit_n(i) = \frac{fit(i)}{\sum_{i=1}^n fit(i)}
+\label{eq:fit_norm}
+\end{align}
+
+It is important to notice that given the way that $fit_n$ is constructed,
+the relation of Equation~\ref{eq:sum_1} arises.
+
+\begin{align}
+\sum_{i=1}^N fit_n(i) = 1
+\label{eq:sum_1}
+\end{align}
+
+\subsubsection{Crossover Step}
+
+% TODO: Descrivere il crossover, comprendendo le varie probabilità e i 3 tipi diversi di crossover
+
+The crossover step serves the purpose of creating two new individuals (\textit{offspring})
+starting from two \textit{parents}. The characteristics of the offspring will thus
+largely depend on their parents' ones.
+
+Three different crossover policies have been developed for this purpose:
+
+%TODO: Sarebbe bello inserire delle immagini per spiegare il riposizionamento dei vari geni, almeno per quanto riguarda il random crossover
+
+\begin{itemize}[noitemsep]
+	\item \textbf{Random crossover}
+	
+	The random method assigns the genes from parents to offspring in a random fashion.
+	
+	Given a number $x$ with $1 \le x \le d$,
+	the offspring inherits the first $x$ genes from the first parent and
+	the remaining ones from the second parent.
+	This process is repeated for the second offspring.
+	\item \textbf{Weighted crossover}
+	
+	The weighted method makes so that the genes of the parent with higher
+	fit have a higher probability of being chosen for the offspring.
+	
+	Given the fit values of the parents $fit(p_1)$ and $fit(p_2)$,
+	with $fit(p_1) \ge fit(p_2)$, then the \textit{inheritance probability} $In_p$
+	is defined as follows:
+	
+	\begin{align*}
+	In_p = \frac{fit(p_1)}{fit(p_1)+fit(p_2)}
+	\end{align*}
+	
+	For each offspring and gene, the probability of inheriting the given gene
+	from the first parent will be $In_p$. Otherwise, the gene will be inherited
+	from the second parent.
+	\item \textbf{Proportional crossover}
+	
+	The proportional method creates the offspring's genes from the parents' ones,
+	proportionally inheriting them based on their fit values.
+	
+	Given the fit values of the parents $fit(p_1)$ and $fit(p_2)$,
+	with $fit(p_1) \ge fit(p_2)$, then the \textit{proportion variables} $pv_1$
+	and $pv_2$ are defined as follows:
+		
+	\begin{align*}
+	pv_1 = \frac{fit(p_1)}{fit(p_1)+fit(p_2)},\quad pv_2 = 1-pv_1
+	\end{align*}
+	
+	Given $Gp_1(x), Gp_2(x), Go(x), 1\le x\le d$
+	respectively for the first parent's, the second parent's
+	and the offspring's	$x$-th gene, then the following relation arises:
+	
+	\begin{align*}
+		Go(x) = Gp_1(x)\cdot pv_1 + Gp_2(x) \cdot pv_2
+	\end{align*}
+
+	This means that the offspring will be more similar
+	to the parent with higher fit, while still carrying on some of 
+	the less performing parent's characteristics.
+\end{itemize}
+
+
+\subsubsection{Mutation Step}
+
+The mutation step's purpose is to randomly mutate some genes to reflect
+the random behaviour of biological evolution through time. 
+
+For each gene $Go(x), 1\le x \le d$ of each offspring generated,
+a random value $r$ between $0$ and $1$ is generated. If this value
+is less than the \textit{mutation probability} $P_{mut}$, then
+the gene is modified by a percentage of its value.
+
+The final value $Go(x)'$ of the x-th gene will be:
+
+\begin{align*}
+Go(x)' = Go(x)\cdot \left(1 \pm m_m\right)
+\end{align*}
+
+Here the \textit{mutation magnitude} is added or subtracted
+with probability $0.5$, by generating a new random value and
+verifying whether it surpasses this threshold.
+
+\section{Metaheuristic Algorithms}
+
+A \textit{metaheuristic} is a procedure designed to find a heuristic
+that may provide a sufficiently good solution to an optimization problem.
+
+Metaheuristic algorithms do not guarantee that a globally optimal solution
+can be found on some class of problems, but they often provide a solution
+with a good fit value by exploring the space of possible solutions.
+
+For this work, two metaheuristic algorithms have been developed and tested
+with the purpose of finding good parameters for fitting the Bouc-Wen hysteresis
+parameters of the identified transfer function over real experimental data.
+
+The first is the \textit{Firefly Algorithm}, described in Subsection~\ref{sec:5.fa}.
+This algorithm mimics the movement of a swarm of fireflies inside the solution space,
+simulating an \textit{attractiveness component}, governed by their \textit{luminosity},
+that pushes the swarm towards local and global optimal solutions.
+Two versions of this algorithm have been developed in order to grant a higher
+versatility for finding the parameters, depending on the required application.
+The modified version is described thoroughly in Section~\ref{sec:5.mfa}.
+
+The second algorithm is the \textit{Particle Swarm Optimization},
+described in Section~\ref{sec:5.pso}.
+
+%TODO: Aggiungere descrizione sommaria PSO
+
+\subsection{Firefly Algorithm}
+\label{sec:5.fa}
+
+The Firefly Algorithm (FA) is a metaheuristic optimization algorithm
+developed by Xin-She Yang~\cite{yang2010nature} that mimics the behaviour
+of fireflies.
+
+The main concept of such algorithm is to create a population of fireflies
+representing candidate solutions in a $d$-dimensional space 
+for a certain optimization problem, where $d$ is the number of variables to be optimized.
+
+The fireflies are then attracted to each other following a set of rules:
+
+\begin{itemize}[noitemsep]
+	\item \textbf{Unisexuality} 
+	
+	All fireflies are unisex, so that one firefly is attracted
+	to other fireflies regardless of their sex.
+	\item \textbf{Attractiveness}
+	
+	The attractiveness of a firefly is proportional to its brightness,
+	thus for any two fireflies the less bright will move towards the brighter one.
+	Both brightness and attractiveness decrease as the distance between
+	two fireflies increases.
+	\item \textbf{Brightness}
+	
+	The brightness of a firefly is determined and affected by the objective function.
+\end{itemize}
+
+
+\subsubsection{Algorithm Overview}
+
+\begin{algorithm}
+	\caption{Firefly Algorithm Approach} \label{alg:fa}
+	\begin{algorithmic}
+		\Procedure{Firefly Algorithm}{}\newline
+		\textbf{Input:} $N$, $G$, $d$, $L$, $U$ \newline
+		\textbf{Output:} \textit{A $d$-dimensional vector,
+			i.e. the candidate solution (firefly) with best fit value}
+		\State{\textbf{Initialization:} \textit{generate $N$ $d$-dimensional vectors} $n_i, i \in \left[1,N\right]$}
+		\State{\textit{Light intensity} $I_i$ for $n_i$
+			\textit{is determined by} $\mathit{f}(n_i)$}
+		\State{\textit{Define light absorption coefficient $\sigma$}}
+		\State{$current\_gen \gets 1$}
+		\While{$current\_gen < G$}
+			\For{$i = 1,\textellipsis,N$}
+				\For{$j = 1,\textellipsis,N$}
+					\If{$I_i < I_j$}
+						\State{\textit{Move firefly i towards j}}
+						\EndIf
+					\State{\textit{Vary attractiveness with distance} $r$}
+					\State{\textit{Evaluate new solutions and update light intensity}}
+				\EndFor
+				\State{\textbf{end for} $j$}
+			\EndFor
+			\State{\textbf{end for} $i$}
+			\State{\textit{Rank the fireflies and find the current global best $g^*$}}
+		\EndWhile
+		\State{\textbf{end while}}
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Algorithm Description}
+
+The following sections serves the purpose of describing in depth the steps
+and the specifics of the Firefly Algorithm.
+
+Section~\ref{sec:5.light_attract} describes how light intensity governs
+the relative attractiveness between two fireflies. 
+
+%todo: descrivere le sezioni successive
+
+\subsubsection{Light Intensity and Attractiveness}
+\label{sec:5.light_attract}
+
+The brightness $I$ of a firefly at a particular location depends
+on the fitness value returned by the fitness function at that specific location.
+
+Each firefly follows a path that brings it closer to other
+attractive fireflies. Relative attractiveness $\Lambda_{ij}$ however is relative,
+and it will vary with the distance $r_{ij}$ between firefly \textit{i} and \textit{j}.
+
+Equation~\ref{eq:attractiveness} shows the relation between distance and attractiveness,
+where $\Lambda_0$ is the attractiveness at zero distance and $\sigma$ is
+a parameter called \textit{light absorption coefficient}.
+
+\begin{align}
+\label{eq:attractiveness}
+\Lambda_{ij}=
+\begin{cases}
+\Lambda_0 e^{-\sigma r_{ij}^2} & \text{if } I_j > I_i \\
+0 & \text{otherwise}
+\end{cases}
+\end{align}
+
+Equation~\ref{eq:attractiveness} suggests that the brighter is a firefly,
+the more attractive it is to any other firefly. The light intensity $I_j$
+for the \textit{j}-th firefly is determined by the fit function.
+
+\begin{align}
+I_j = \mathit{f}_{fit}(n_j) = \mathit{f}_{fit}(n_{j,1},n_{j,2},\textellipsis,n_{j,d})
+\end{align}
+
+
+The fit function chosen for this work is the same as for the Genetic Algorithm
+approach, and is shown in Equation~\ref{eq:fitness}. 
+The distance $r_{ij}$ between firefly \textit{i} and \textit{j}
+at step \textit{k} is given by the Euclidean distance between the two.
+
+\begin{equation}
+\begin{cases}
+r_{ij}^k &= \norm{n_j^k-n_i^k} \\ 
+&= \sqrt{(n_{j,1}^k-n_{i,1}^k)^2+(n_{j,2}^k-n_{i,2}^k)^2+\textellipsis+(n_{j,d}^k-n_{i,d}^k)^2}
+\end{cases}
+\end{equation}
+
+\subsubsection{Firefly Movement}
+
+The movement of a firefly $n_i$ towards a more attractive $n_j$ 
+at step $k \in \left[1,G\right]$ is given by Equation~\ref{eq:fa_movement}.
+
+\begin{align}
+\label{eq:fa_movement}
+n_i^k = n_i^k + \Lambda_{ij}^k\left(n_j^k-n_i^k\right)+\rho \mathit{v}_i^k
+\end{align}
+
+Here $\Lambda_{ij}$ is the attractiveness of firefly \textit{j} to firefly \textit{i},
+$\rho$ is a \textit{randomization parameter} and $\mathit{v}_i$ is
+a vector of $d$ random numbers drawn from a Gaussian or uniform distribution.
+
+It is important to notice that the movement of a given firefly
+towards a less attractive one is given only by a random factor, but it is still present.
+This means that the most attractive fireflies still move and can
+potentially find better solutions.
+
+After the fireflies' positions are updated, new fitness values
+are calculated. New generations are obtained
+by using the same set of equations. Over successive generations,
+the fireflies converge to local and global optimal values,
+completing the optimization process.
+
+\clearpage
+
+\subsection{Modified Firefly Algorithm}
+
+A modified version of the Firefly Algorithm has been developed and studied
+by M.A. Zaman and U. Sikder~\cite{zaman2015bouc}. The main idea behind
+the Modified Firefly Algorithm is to change the \textit{process control parameters}
+$\Lambda_0$, $\sigma$ and $\rho$ through the iterations. Typical values
+of these parameters are $\Lambda_0=1$, $\sigma = 1$ and $\rho \in \left[0.1,0.2\right]$.
+By changing these from static to dynamic parameters it is possible to perform
+a more precise tuning of the fireflies behaviour, reflecting thus on the performance
+of the algorithm on finding their optimal values.
+
+\subsubsection{Attractiveness at Zero Distance}
+
+It has been studied that the attractiveness at zero distance parameter $\Lambda_0$
+controls the \textit{exploration distance} of the fireflies: 
+higher values of $\Lambda_0$ encourage global exploration while
+lower values encourage close refinement (local exploitation). 
+
+Hence it would be better to make $\Lambda_0$ a decreasing value over the iterations, 
+such that initially the fireflies explore a wide range of possible solutions
+minimizing the risk of getting stuck in a local optimum, while 
+near the end of the execution a lower value would allow for fine refinement
+around the different optima found.
+
+The formula for the attractiveness parameter for iteration
+$k\in \left[1,G\right]$ has been changed as shown in Equation~\ref{eq:attr_changed}.
+
+\begin{align}
+\label{eq:attr_changed}
+\Lambda_0(k) = a - b\frac{1-k}{1-G}
+\end{align}
+
+From Equation~\ref{eq:attr_changed} it is possible to notice
+that the value of $\Lambda_0$ goes from $a$ (when $k=1$) to $a-b$ (when $k=G$).
+
+
+
+
+
+
+
 
 
 

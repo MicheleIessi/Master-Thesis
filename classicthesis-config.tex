@@ -325,3 +325,6 @@ pdfproducer={LaTeX with hyperref and classicthesis}
 \usepackage{booktabs}
 \captionsetup{justification=centering}
 \usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
