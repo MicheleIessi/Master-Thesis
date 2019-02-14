@@ -22,30 +22,13 @@ Section~\ref{sec:5.evo} introduces the concept of \textit{evolutionary algorithm
 with particular regard towards a simple genetic algorithm approach
 with the purpose of optimization.
 
-After that, Section~\ref{sec:5.opt} introduces methods of \textit{multi-variable
-optimization}, with the goal of transforming the search of parameters
+After that, Section~\ref{sec:5.opt} introduces methods of \textit{metaheuristic
+algorithm}, with the goal of transforming the search of parameters
 into an optimization problem.
 
-Section~\ref{sec:5.impl} describes the implementation of said algorithms,
-and Section~\ref{sec:5.res} shows the result for each of them.
+Section~\ref{sec:5.res} contains results and comparison
+for all algorithms previously described.
 
-%{\color{red} 
-%\begin{itemize}
-%	\item Introduzione
-%	\item Algoritmi evoluzionistici
-%	\begin{itemize}
-%		\item Algoritmi genetici
-%	\end{itemize}
-%	\item Ottimizzazione multi variabile
-%	\begin{itemize}
-%		\item Algoritmo firefly
-%		\item Algoritmo firefly modificato
-%		\item Particle Swarm Optimization
-%	\end{itemize}
-%	\item Implementazione
-%	\item Confronto risultati
-%\end{itemize}
-%}
 
 \section{Introduction}
 After having described how to get a discrete model of the McKibben artificial muscle,
@@ -109,6 +92,8 @@ The description and peculiarities of each step are discussed in Section~\ref{sec
 The genetic algorithm also makes use of several parameters, which are summarized
 in Table~\ref{tab:ga_params}.
 
+% todo: replicare una tabella simile per gli algoritmi metaeuristici
+
 \begin{table}[]
 	\centering
 	\begin{tabularx}{\linewidth}{c X}
@@ -148,7 +133,7 @@ in Table~\ref{tab:ga_params}.
 			\EndWhile{\textbf{end while}}
 			\State{\textbf{Mutation:}}
 			\ForEach{$m \in \mathcal M_p$ }
-				\ForEach{\textit{gene} $m_i, i=1,\textellipsis,d$}
+				\ForEach{\textit{gene} $m_i, i=1,\ldots,d$}
 					\State{\textit{Generate a random value $r$ such that} $0\le r \le 1$}
 					\If{$r\le P_{mut}$}
 						\State{\textit{Mutate the i-th gene with percentage} $\pm m_m\%$}
@@ -185,8 +170,8 @@ following the constraints in Equation~\ref{eq:constraints}.
 
 \begin{align}
 \begin{cases}
-	p_i = \left[p_{i1},\textellipsis,p_{id}\right] \\
-	L_j \leq p_{ij} \leq U_j, \quad i=1,\textellipsis,N, \quad j=1,\textellipsis,d
+	p_i = \left[p_{i1},\ldots,p_{id}\right] \\
+	L_j \leq p_{ij} \leq U_j, \quad i=1,\ldots,N, \quad j=1,\ldots,d
 \end{cases}
 \label{eq:constraints}
 \end{align}
@@ -204,8 +189,8 @@ are taken from data acquired by the identification experiments described
 in Section~\ref{sec:4.ide}. 
 
 \begin{align}
-u &= \left[u_1,u_2,\textellipsis,u_k\right] \label{eq:exp_pres} \\
-l &= \left[l_1,l_2,\textellipsis,l_k\right] \label{eq:exp_disp}
+u &= \left[u_1,u_2,\ldots,u_k\right] \label{eq:exp_pres} \\
+l &= \left[l_1,l_2,\ldots,l_k\right] \label{eq:exp_disp}
 \end{align}
 
 with $k$ representing the number of points for which the experimental data
@@ -330,6 +315,7 @@ with probability $0.5$, by generating a new random value and
 verifying whether it surpasses this threshold.
 
 \section{Metaheuristic Algorithms}
+\label{sec:5.opt}
 
 A \textit{metaheuristic} is a procedure designed to find a heuristic
 that may provide a sufficiently good solution to an optimization problem.
@@ -351,9 +337,21 @@ versatility for finding the parameters, depending on the required application.
 The modified version is described thoroughly in Section~\ref{sec:5.mfa}.
 
 The second algorithm is the \textit{Particle Swarm Optimization},
-described in Section~\ref{sec:5.pso}.
+described in Section~\ref{sec:5.pso}. It is a computational method that optimizes a
+problem by iteratively trying to improve a candidate solution with regard to a given
+measure of quality. It solves a problem by having a population of candidate solutions
+(\textit{particles}) moving around in the search-space according to simple laws
+governed by their position and velocity.
+Each particle's movement is influenced by its local best known position,
+but is also guided toward the best known positions in the search-space.
+This value is updated whenever a better position is found any particle.
+This is expected to move the swarm toward the best solutions.
+The algorithm has been conceived as a mathematical representation
+of the movement of organisms in a bird flock or fish school.
 
-%TODO: Aggiungere descrizione sommaria PSO
+The values chosen for algorithms' parameters are discussed in Section~\ref{sec:5.res},
+which is dedicated to show the results and compare these algorithms.
+
 
 \subsection{Firefly Algorithm}
 \label{sec:5.fa}
@@ -400,8 +398,8 @@ The fireflies are then attracted to each other following a set of rules:
 		\State{\textit{Define light absorption coefficient $\sigma$}}
 		\State{$current\_gen \gets 1$}
 		\While{$current\_gen < G$}
-			\For{$i = 1,\textellipsis,N$}
-				\For{$j = 1,\textellipsis,N$}
+			\For{$i = 1,\ldots,N$}
+				\For{$j = 1,\ldots,N$}
 					\If{$I_i < I_j$}
 						\State{\textit{Move firefly i towards j}}
 						\EndIf
@@ -423,10 +421,11 @@ The fireflies are then attracted to each other following a set of rules:
 The following sections serves the purpose of describing in depth the steps
 and the specifics of the Firefly Algorithm.
 
-Section~\ref{sec:5.light_attract} describes how light intensity governs
+Section~\ref{sec:5.light_attract} describes how light intensity influences
 the relative attractiveness between two fireflies. 
 
-%todo: descrivere le sezioni successive
+Section~\ref{sec:5.famovement} describes how fireflies move in the solution
+space through the iterations.
 
 \subsubsection{Light Intensity and Attractiveness}
 \label{sec:5.light_attract}
@@ -456,7 +455,7 @@ the more attractive it is to any other firefly. The light intensity $I_j$
 for the \textit{j}-th firefly is determined by the fit function.
 
 \begin{align}
-I_j = \mathit{f}_{fit}(n_j) = \mathit{f}_{fit}(n_{j,1},n_{j,2},\textellipsis,n_{j,d})
+I_j = \mathit{f}_{fit}(n_j) = \mathit{f}_{fit}(n_{j,1},n_{j,2},\ldots,n_{j,d})
 \end{align}
 
 
@@ -468,11 +467,12 @@ at step \textit{k} is given by the Euclidean distance between the two.
 \begin{equation}
 \begin{cases}
 r_{ij}^k &= \norm{n_j^k-n_i^k} \\ 
-&= \sqrt{(n_{j,1}^k-n_{i,1}^k)^2+(n_{j,2}^k-n_{i,2}^k)^2+\textellipsis+(n_{j,d}^k-n_{i,d}^k)^2}
+&= \sqrt{(n_{j,1}^k-n_{i,1}^k)^2+(n_{j,2}^k-n_{i,2}^k)^2+\ldots+(n_{j,d}^k-n_{i,d}^k)^2}
 \end{cases}
 \end{equation}
 
 \subsubsection{Firefly Movement}
+\label{sec:5.famovement}
 
 The movement of a firefly $n_i$ towards a more attractive $n_j$ 
 at step $k \in \left[1,G\right]$ is given by Equation~\ref{eq:fa_movement}.
@@ -497,9 +497,9 @@ by using the same set of equations. Over successive generations,
 the fireflies converge to local and global optimal values,
 completing the optimization process.
 
-\clearpage
 
 \subsection{Modified Firefly Algorithm}
+\label{sec:5.mfa}
 
 A modified version of the Firefly Algorithm has been developed and studied
 by M.A. Zaman and U. Sikder~\cite{zaman2015bouc}. The main idea behind
@@ -534,6 +534,152 @@ $k\in \left[1,G\right]$ has been changed as shown in Equation~\ref{eq:attr_chang
 From Equation~\ref{eq:attr_changed} it is possible to notice
 that the value of $\Lambda_0$ goes from $a$ (when $k=1$) to $a-b$ (when $k=G$).
 
+\subsubsection{Light Absorption Coefficient}
+
+The value of $\sigma$ control the effect of distance on the motion of fireflies.
+Equation~\ref{eq:attractiveness} suggests that lower values of $\sigma$ will
+cause movement towards other attractive fireflies even if they are far away.
+This may lead to a premature convergence of a high number of fireflies
+towards a local maximum.
+
+However, after a sufficient number of generations, it is desirable
+that the fireflies start to converge towards the maximum value found so far.
+To do so, a lower value of $\sigma$ is required.
+
+The formula for the \textit{light absorption coefficient} $\sigma$
+for iteration $k$ has been changed as shown in Equation~\ref{eq:lac_changed}.
+
+\begin{align}
+\label{eq:lac_changed}
+\sigma(k) = 2 \cdot \left(7^{\nicefrac{-k}{G}}\right),\quad c \ge 0, d \ge 0
+\end{align}
+
+\subsubsection{Randomization Parameter}
+
+The \textit{randomization parameter} $\rho$ controls the random component
+of the firefly's motion. A large value of $\rho$ encourages broad random exploration.
+Using the same arguments as for the \textit{light absorption coefficient},
+it can be inferred that a gradual decrease of the value of $\rho$ over
+successive iterations should improve the performance of the algorithm
+as the fireflies must explore the solution space widely at the beginning
+to find good candidate solutions and then refine them in latter steps.
+
+The formula for the \textit{randomization parameter} $\rho$
+for iteration $k$ has been changed as shown in Equation~\ref{eq:random_changed}.
+
+\begin{align}
+\label{eq:random_changed}
+\rho(k) = 0.1 \cdot e^{\nicefrac{-4.8k}{G}}
+\end{align}
+
+The proposed modification of the algorithm using dynamic parameters
+are expected to provide a good mix of global exploration and local exploitation,
+resulting in high accuracy and fast convergence of the algorithm towards
+the global optimum.
+
+\subsection{Particle Swarm Optimization}
+\label{sec:5.pso}
+
+Particle Swarm Optimization (PSO) is an evolutionary computation technique
+developed by Kennedy and Eberhart in 1995~\cite{kennedy2011particle}~\cite{eberhart1995new}.
+
+PSO is similar to a genetic algorithm, meaning that both algorithms 
+are initialized with a population of random solutions. Unlike a GA, however,
+candidate solutions, called \textit{particles}, are also assigned a randomized velocity.
+After that, they are flown into the problem space.
+
+Each point of the problem space represents a set of parameters for the optimization
+problem that has to be solved, in this case the Bouc-Wen model parameter search
+Each particle keeps track of its coordinates in the problem space,
+and remembers the coordinate of the point which has yielded the best solution,
+in other words the point that has the highest fitness value found by them so far.
+This value is called \textit{pbest}, which means \textit{personal best}.
+
+Another value is tracked and known by all particles, which is the \textit{global best}
+value found by any particle up until that certain iteration of the algorithm.
+This value is called \textit{gbest}.
+
+The particle swarm optimization concept consists of, at each time step,
+changing the velocity (accelerating) each particle towards its \textit{pbest}
+and \textit{gbest} locations. Acceleration is weighted by a random term,
+with separate random numbers generated to dictate acceleration towards
+\textit{pbest} and \textit{gebest} locations.
+
+% todo: considerare se è il caso di inserire la descrizione di ogni algoritmo dentro la overview piuttosto che all'inizio della macro sezione.
+
+\subsubsection{Algorithm Overview}
+
+\begin{algorithm}
+	\caption{Particle swarm optimization approach} \label{alg:pso}
+	\begin{algorithmic}
+		\Procedure{Particle Swarm Optimization}{}\newline
+			\textbf{Input:} $N$, $G$, $d$, $L$, $U$, $V_{max}$\newline
+			\textbf{Output:} \textit{A $d$-dimensional vector, i.e. the candidate solution (particle) with best fit value}
+			\State{\textbf{Initialization:} \textit{generate $N$ $d$-dimensional vectors} $n_i, i \in \left[1,N\right]$}
+			\State{$current\_gen \gets 1$}
+			\While{$current\_gen < G$}
+				\State{\textbf{Evaluation:} \textit{compute the fit value $fit(i)$ for each vector}}
+				\State \begin{varwidth}[t]{.85\textwidth} 
+					\textbf{Pbest comparison:} \textit{Compare the particle's fit value with particle's $pbest$.
+						If the current value is better than $pbest$, then set $pbest$ value equal to the current value, and $pbest$ location equal to the particle's current location in the $d$-dimensional space}
+					\end{varwidth}
+				\State \begin{varwidth}[t]{.85\textwidth} 
+					\textbf{Gbest comparison:} \textit{Compare the particle's fit value with $gbest$.
+						If the current value is better than $gbest$, then set $gbest$ value equal to the current value, and $gbest$ location equal to the particle's current location in the $d$-dimensional space}
+					\end{varwidth}
+				\State \textbf{Update:} \textit{change the particle's velocity and position}
+			\EndWhile{\textbf{end while}}
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Algorithm Description}
+
+The following sections serve the purpose of describing in depth the steps
+and the specifics of the Particle Swarm Optimization algorithm.
+
+Section~\ref{sec:5.pso.speed} describes how the values for velocity and position
+for the particles are updated each iteration.
+
+Section~\ref{sec:5.inertia} describes the purpose of and how to compute
+the inertia weight $w$ used when calculating the speed of a particle.
+
+Section~\ref{sec:5.pso.constants} describes the purpose of the acceleration
+constants $c_1$ and $c_2$.
+
+\subsubsection{Velocity and Position Update}
+\label{sec:5.pso.speed}
+
+Given $x_i$ and $v_i$ which are respectively the \textit{i}-th particle's position
+and velocity, then the movement of the \textit{i}-th particle is dictated by
+Equations~\ref{eq:pso_velocity} and~\ref{eq:pso_position}.
+In Equation~\ref{eq:pso_velocity}, $w$ is the \textit{inertia weight},
+$x_{pb}$ is the position associated to the particle's personal best value, 
+and $x_{gb}$ is the position associated to the global best value among all particles.
+
+\begin{align}
+v_i &= w\cdot v_i + c_1 \cdot rand() \left(x_{pb}-x_i\right)+c_2\cdot rand() \left(x_{gb}-x_i\right) \label{eq:pso_velocity} \\
+x_i &= x_i + v_i \label{eq:pso_position}
+\end{align}
+
+Particles' velocity are constrained by the maximum velocity parameter $V_{max}$.
+This is a very important parameter, as it determines the fineness with which regions
+between the present position and the best positions known are searched.
+If $V_{max}$ is too high, particles my overshoot good solutions. On the other hand,
+if $V_{max}$ is too low, particles may move very slowly and may not be able to find
+a good solution before the algorithm comes to a halt.
+
+\subsubsection{Inertia Weight}
+\label{sec:5.inertia}
+
+
+\subsubsection{Acceleration Constants}
+\label{sec:5.pso.constants}
+
+The \textit{acceleration constants} $c_1$ and $c_2$ represent
+the importance of the personal and global best according to the particles.
+If $c_1$ is greater than $c_2$, the particles will tend to judge as better
+their own personal best and will be inclined to move towards that location.
 
 
 
@@ -543,3 +689,9 @@ that the value of $\Lambda_0$ goes from $a$ (when $k=1$) to $a-b$ (when $k=G$).
 
 
 
+\section{Algorithm Comparison}
+\label{sec:5.res}
+
+\subsection{System Specifications}
+\subsection{Time Comparison}
+\subsection{Solution Comparison}
