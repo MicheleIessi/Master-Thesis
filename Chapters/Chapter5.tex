@@ -147,6 +147,8 @@ in Table~\ref{tab:ga_params}.
 \end{algorithm}
 
 \subsubsection{Algorithm Description}
+%TODO inserire la descrizione dell'algoritmo genetico
+
 \label{sec:5.steps}
 \subsubsection{Initialization Step}
 
@@ -427,6 +429,26 @@ the relative attractiveness between two fireflies.
 Section~\ref{sec:5.famovement} describes how fireflies move in the solution
 space through the iterations.
 
+Table~\ref{tab:fa_params} summarizes and describes the parameters used by the algorithm.
+
+\begin{table}[]
+	\centering
+	\begin{tabularx}{\linewidth}{c X}
+		\toprule
+		\textbf{Parameter} & \textbf{Description} \\ \midrule
+		$N$        & The population's size, i.e. the number of fireflies (candidate solutions) that move in the solution space to find a good solution. \\
+		$G$         & The maximum generation. After reaching that stage of evolution, the algorithm stops. \\
+		$d$           	   & The chromosome's dimension, i.e. the number of variables to be optimized by the algorithm. \\
+		$L$           	   & A $d$-dimensional vector containing the lower bounds for each variable. \\
+		$U$				   & A $d$-dimensional vector containing the upper bounds for each variable. \\ 
+		$\Lambda_0$ & Attractiveness at zero distance, described in Section~\ref{sec:5.azd} \\
+		$\sigma$		& Light absorption coefficient that influences the attractiveness distance, described in Section~\ref{sec:5.lac}. \\
+		$\rho$ & Randomization parameter influencing the fireflies' motion, described in Section~\ref{sec:5.rp} \\ \bottomrule
+	\end{tabularx}
+	\caption{Parameters for the genetic algorithm}
+	\label{tab:fa_params}
+\end{table}
+
 \subsubsection{Light Intensity and Attractiveness}
 \label{sec:5.light_attract}
 
@@ -511,6 +533,7 @@ a more precise tuning of the fireflies behaviour, reflecting thus on the perform
 of the algorithm on finding their optimal values.
 
 \subsubsection{Attractiveness at Zero Distance}
+\label{sec:5.azd}
 
 It has been studied that the attractiveness at zero distance parameter $\Lambda_0$
 controls the \textit{exploration distance} of the fireflies: 
@@ -535,6 +558,7 @@ From Equation~\ref{eq:attr_changed} it is possible to notice
 that the value of $\Lambda_0$ goes from $a$ (when $k=1$) to $a-b$ (when $k=G$).
 
 \subsubsection{Light Absorption Coefficient}
+\label{sec:5.lac}
 
 The value of $\sigma$ control the effect of distance on the motion of fireflies.
 Equation~\ref{eq:attractiveness} suggests that lower values of $\sigma$ will
@@ -555,6 +579,7 @@ for iteration $k$ has been changed as shown in Equation~\ref{eq:lac_changed}.
 \end{align}
 
 \subsubsection{Randomization Parameter}
+\label{sec:5.rp}
 
 The \textit{randomization parameter} $\rho$ controls the random component
 of the firefly's motion. A large value of $\rho$ encourages broad random exploration.
@@ -609,7 +634,7 @@ with separate random numbers generated to dictate acceleration towards
 
 \subsubsection{Algorithm Overview}
 
-\begin{algorithm}
+\begin{algorithm}[H]
 	\caption{Particle swarm optimization approach} \label{alg:pso}
 	\begin{algorithmic}
 		\Procedure{Particle Swarm Optimization}{}\newline
@@ -672,6 +697,17 @@ a good solution before the algorithm comes to a halt.
 \subsubsection{Inertia Weight}
 \label{sec:5.inertia}
 
+The use of a \textit{inertia weight} $w$ has provided improved performance
+in a number of applications, as an opportune selection of the inertia weight 
+provides a balance between global and local exploration,
+and results in fewer iterations on average to find a sufficiently good solution.
+
+The \textit{inertia weight} w changes dynamically with the current iteration
+of the algorithm according to the following law:
+
+\begin{align*}
+	w(k) = a-(a-b)\cdot \frac{k}{G},\quad k \in \left[1,G\right]
+\end{align*}
 
 \subsubsection{Acceleration Constants}
 \label{sec:5.pso.constants}
@@ -682,16 +718,686 @@ If $c_1$ is greater than $c_2$, the particles will tend to judge as better
 their own personal best and will be inclined to move towards that location.
 
 
-
-
-
-
-
-
-
 \section{Algorithm Comparison}
 \label{sec:5.res}
 
+Simulations have been run on all the algorithms proposed in the previous sections.
+Each one of them has been tested with both the standard and the generalized Bouc-Wen
+model of hysteresis.
+
+Since the generalized version of the hysteresis component consists of 8 variables
+it is safe to assume beforehand that the execution time of the algorithms would be higher.
+A comprehensive comparison of the execution times for the algorithms is described in
+Section~\ref{sec:5.comparison_time}.
+
+
+
 \subsection{System Specifications}
-\subsection{Time Comparison}
+
+
+
 \subsection{Solution Comparison}
+\label{sec:5.comparison_res}
+
+This Section serves the purpose of comparing the solutions found using the
+algorithm previously described when trying to find suitable parameters
+both for the classic and the generalized Bouc-Wen model of hysteresis.
+
+%TODO: inserire dei plot per l'andamento delle variabili per tutti e 3 gli algoritmi e le 2 versioni del modello isteretico
+\subsubsection{Genetic Algorithm -- Classic Bouc-Wen Model}
+
+Table~\ref{tab:ga_classic_params} contains the parameters used
+for the genetic algorithm approach. Those parameters have been used for
+the genetic algorithm using all three kinds of crossover strategies:
+random, weighted and proportional.
+
+Figures~\ref{fig:ga_classic_rand},~\ref{fig:ga_classic_w}
+and~\ref{fig:ga_classic_prop} show the trend of the classic Bouc-Wen model
+parameters $A$, $\alpha$, $\beta$ and $\gamma$ depending on the
+crossover strategy used.
+
+It is important to note that due to how the three strategies have been developed,
+the performance of the random and weighted methods depend strictly on
+the initial population, as the individuals' chromosomes are always only swapped.
+The final result will approach the best possible solution attainable
+using the chromosomes of the initial population. 
+However, it is certainly possible that the final fit may not be acceptable.
+
+Due to this fact, the proportional crossover strategy proved to be the best
+as it generates new chromosomes (and thus, completely new individuals)
+each generation.
+
+\begin{table}
+	\centering
+	\begin{tabular}{c c}
+		\toprule
+		\textbf{Parameter} & \textbf{Description} \\ \toprule
+		$N$			& $30$ \\
+		$G$			& $30$ \\
+		$d$			& $4$  \\
+		$L$			& $\left[0.5, 0.5, -0.5, -0.1\right]$ \\
+		$U$			& $\left[1, 0.99, 0.5, 0.1\right]$ \\ 
+		$P_{cross}$	& $0.5$ \\
+		$P{mut}$	& $0.1$ \\
+		$m_m$		& $0.05$ \\	\bottomrule
+	\end{tabular}
+	\caption{Parameters for the genetic algorithm}
+	\label{tab:ga_classic_params}
+\end{table}
+
+%TODO: Per il GA sarebbe interessante mostrare le differenze tra i 3 tipi di crossover
+% I dati che seguono sono stati ottenuti usando proportional
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	%	xlabel={Generation},
+	ylabel={A},
+	xmin=1, xmax=30,
+	ymin=0.6, ymax=1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.6,0.7,0.8,0.9,1},
+	thick]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,0.545135339844412)(2,0.788923360170356)(3,0.690777924711849)
+		(4,0.690777924711849)(5,0.960441630068157)(6,0.690777924711849)
+		(7,0.690777924711849)(8,0.615202221951477)(9,0.615202221951477)
+		(10,0.690777924711849)(11,0.645962333049051)(12,0.725316820947442)
+		(13,0.690777924711849)(14,0.656239028476257)(15,0.690777924711849)
+		(16,0.725316820947442)(17,0.690777924711849)(18,0.656239028476257)
+		(19,0.656239028476257)(20,0.725316820947442)(21,0.799661795094554)
+		(22,0.799661795094554)(23,0.799661795094554)(24,0.761582661994814)
+		(25,0.761582661994814)(26,0.761582661994814)(27,0.725316820947442)
+		(28,0.761582661994814)(29,0.799661795094554)(30,0.761582661994814)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	%	xlabel={Generation},
+	ylabel={$\alpha$},
+	xmin=1, xmax=30,
+	ymin=0.5, ymax=0.9,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.5,0.6,0.7,0.8,0.9},
+	thick]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,0.508448976427112)(2,0.754708795645205)(3,0.754708795645205)
+		(4,0.657392330450923)(5,0.754708795645205)(6,0.754708795645205)
+		(7,0.716973355862945)(8,0.754708795645205)(9,0.754708795645205)
+		(10,0.754708795645205)(11,0.754708795645205)(12,0.754708795645205)
+		(13,0.804793959442481)(14,0.754708795645205)(15,0.726326548396839)
+		(16,0.804793959442481)(17,0.845033657414605)(18,0.802781974543875)
+		(19,0.802781974543875)(20,0.802781974543875)(21,0.802781974543875)
+		(22,0.802781974543875)(23,0.804793959442481)(24,0.804793959442481)
+		(25,0.804793959442481)(26,0.804793959442481)(27,0.764554261470357)
+		(28,0.764554261470357)(29,0.764554261470357)(30,0.764554261470357)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	%	xlabel={Generation},
+	ylabel={$\beta$},
+	xmin=1, xmax=30,
+	ymin=-0.3, ymax=0.5,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.3,-0.1,0.1,0.3,0.5},
+	thick]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,-0.268822537450358)(2,0.344310428956600)(3,0.344310428956600)
+		(4,0.344310428956600)(5,0.344310428956600)(6,0.361525950404430)
+		(7,0.344310428956600)(8,0.379602247924651)(9,0.361525950404430)
+		(10,0.344310428956600)(11,0.361525950404430)(12,0.344310428956600)
+		(13,0.344310428956600)(14,0.344310428956600)(15,0.344310428956600)
+		(16,0.344310428956600)(17,0.344310428956600)(18,0.344310428956600)
+		(19,0.344310428956600)(20,0.361525950404430)(21,0.344310428956600)
+		(22,0.344310428956600)(23,0.361525950404430)(24,0.344310428956600)
+		(25,0.185855452192517)(26,0.185390813562035)(27,0.176562679582891)
+		(28,0.185390813562035)(29,0.185390813562035)(30,0.185390813562035)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	xlabel={Generation},
+	ylabel={$\gamma$},
+	yticklabel style={/pgf/number format/fixed},
+	xmin=1, xmax=30,
+	ymin=-0.1, ymax=0.1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.1,-0.05,0,0.05,0.1},
+	thick]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,-0.0871709478837318)(2,0.0852051419429015)(3,0.0852051419429015)
+		(4,0.0852051419429015)(5,0.0852051419429015)(6,0.0852051419429015)
+		(7,0.0852051419429015)(8,0.0852051419429015)(9,0.0852051419429015)
+		(10,0.0852051419429015)(11,0.0852051419429015)(12,0.0852051419429015)
+		(13,0.0894653990400466)(14,0.0894653990400466)(15,0.0852051419429015)
+		(16,0.0894653990400466)(17,0.0939386689920489)(18,0.0894653990400466)
+		(19,0.0939386689920489)(20,0.0939386689920489)(21,0.0939386689920489)
+		(22,0.0939386689920489)(23,0.0939386689920489)(24,0.0939386689920489)
+		(25,0.0464759550397010)(26,0.0487997527916861)(27,0.0464759550397010)
+		(28,0.0464759550397010)(29,0.0464759550397010)(30,0.0464759550397010)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\caption{Genetic Algorithm -- Classic BW Model (Random crossover)}
+	\label{fig:ga_classic_rand}
+\end{figure}
+
+A series of sharp changes is noticeable in Figure~\ref{fig:ga_classic_rand}.
+As said beforehand, this behaviour is due to the fact that the set of chromosomes
+obtainable by the individual in the population is fixed to the initial one.
+
+Nonetheless it is possible to notice that the variables $\beta$ and $\gamma$
+are the first to settle to fairly consistent values, up until generation 25.
+This behaviour is probably due to the current best individual being near a local optimum.
+
+The final values for each parameter using this crossover strategy
+are in Table~\ref{tab:ga_classic_random_final}.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l c c c c}
+		\toprule
+		\textbf{Parameter}		& $A$	& $\alpha$	& $\beta$	& $\gamma$ 	\\ \midrule
+		\textbf{Final value}	& $0.76158$	& $0.76455$	& $,0.18539$ & $0.04647$	\\ \bottomrule
+	\end{tabular}
+	\caption{Random crossover -- Final values (Classic BW model)}
+	\label{tab:ga_classic_random_final}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	%	xlabel={Generation},
+	ylabel={A},
+	xmin=1, xmax=30,
+	ymin=0.5, ymax=0.9,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.5,0.6,0.7,0.8,0.9},
+	thick]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,0.618086069866413)(2,0.773856623996490)(3,0.592746940707517)
+		(4,0.714602293601890)(5,0.788559995124738)(6,0.788559995124738)
+		(7,0.788559995124738)(8,0.752212940633569)(9,0.789823587665247)
+		(10,0.789823587665247)(11,0.789823587665247)(12,0.829314767048510)
+		(13,0.829314767048510)(14,0.829314767048510)(15,0.789823587665247)
+		(16,0.750332408281985)(17,0.712815787867886)(18,0.712815787867886)
+		(19,0.829314767048510)(20,0.829314767048510)(21,0.789823587665247)
+		(22,0.789823587665247)(23,0.829314767048510)(24,0.829314767048510)
+		(25,0.829314767048510)(26,0.789823587665247)(27,0.829314767048510)
+		(28,0.789823587665247)(29,0.789823587665247)(30,0.789823587665247)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	%	xlabel={Generation},
+	ylabel={$\alpha$},
+	xmin=1, xmax=30,
+	ymin=0.5, ymax=1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.5,0.625,0.75,0.875,1},
+	thick]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,0.813187272905702)(2,0.556820971784476)(3,0.860684845546224)
+		(4,0.836803572892517)(5,0.893766789568932)(6,0.893766789568932)
+		(7,0.806624527585961)(8,0.893766789568932)(9,0.891532372595010)
+		(10,0.849078450090485)(11,0.849078450090485)(12,0.893766789568932)
+		(13,0.893766789568932)(14,0.893766789568932)(15,0.893766789568932)
+		(16,0.893766789568932)(17,0.936108991224760)(18,0.936108991224760)
+		(19,0.936108991224760)(20,0.936108991224760)(21,0.982914440785998)
+		(22,0.982914440785998)(23,0.985377885499748)(24,0.940500000000000)
+		(25,0.985377885499748)(26,0.940500000000000)(27,0.936108991224760)
+		(28,0.940500000000000)(29,0.940500000000000)(30,0.940500000000000)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	%	xlabel={Generation},
+	ylabel={$\beta$},
+	xmin=1, xmax=30,
+	ymin=-0.5, ymax=0.5,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.5,-0.25,0,0.25,0.5},
+	thick]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,-0.499357514523178)(2,0.330664545640134)(3,-0.230611577461169)
+		(4,-0.230611577461169)(5,0.487411160746289)(6,0.487411160746289)
+		(7,0.460700703070708)(8,0.484948108495482)(9,-0.242142156334227)
+		(10,-0.230611577461169)(11,-0.230611577461169)(12,-0.230611577461169)
+		(13,-0.230611577461169)(14,-0.242142156334227)(15,-0.230611577461169)
+		(16,-0.230611577461169)(17,-0.242142156334227)(18,-0.219080998588110)
+		(19,-0.242142156334227)(20,-0.230611577461169)(21,-0.242142156334227)
+		(22,-0.242142156334227)(23,-0.254249264150938)(24,-0.254249264150938)
+		(25,-0.230611577461169)(26,-0.254249264150938)(27,-0.242142156334227)
+		(28,-0.254249264150938)(29,-0.242142156334227)(30,-0.242142156334227)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	xlabel={Generation},
+	ylabel={$\gamma$},
+	yticklabel style={/pgf/number format/fixed},
+	xmin=1, xmax=30,
+	ymin=-0.1, ymax=0.1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.1,-0.05,0,0.05,0.1},
+	thick]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,-0.0985378305342493)(2,0.0847351667259024)(3,0.0813828498620047)
+		(4,-0.0780844050799008)(5,-0.0780844050799008)(6,-0.0780844050799008)
+		(7,0.0138301733936949)(8,0.0138301733936949)(9,0.0145216820633796)
+		(10,0.0145216820633796)(11,0.0145216820633796)(12,0.0152477661665486)
+		(13,0.0152477661665486)(14,0.0145216820633796)(15,0.0145216820633796)
+		(16,0.0145216820633796)(17,0.0145216820633796)(18,0.0145216820633796)
+		(19,0.0137955979602107)(20,0.0144853778582212)(21,0.0137955979602107)
+		(22,0.0152477661665486)(23,0.0152477661665486)(24,0.0160101544748761)
+		(25,0.0160101544748761)(26,0.0152477661665486)(27,0.0152477661665486)
+		(28,0.0152477661665486)(29,0.0144853778582212)(30,0.0160101544748761)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\caption{Genetic Algorithm -- Classic BW Model (Weighted crossover)}
+	\label{fig:ga_classic_w}
+\end{figure}
+
+As for the random crossover strategy, the weighted crossover strategy
+operates on the closed set of initial chromosome values, but combines
+them judging the fit value of the individuals instead of doing it randomly.
+
+The most important difference between these two results is the fact that
+it takes fewer generations to reach what may be a global optimum.
+This is especially noticeable in Figure~\ref{fig:ga_classic_w},
+as the parameters $\beta$ and $\gamma$ stabilize on similar values
+around generation 10 and 7, respectively.
+
+The final values for each parameter using this crossover strategy
+are in Table~\ref{tab:ga_classic_weighted_final}.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l c c c c}
+		\toprule
+		\textbf{Parameter}		& $A$	& $\alpha$	& $\beta$	& $\gamma$ 	\\ \midrule
+		\textbf{Final value}	& $0.78982$	& $0.94050$	& $-0.24214$ & $0.01601$	\\ \bottomrule
+	\end{tabular}
+	\caption{Weighted crossover -- Final values (Classic BW model)}
+	\label{tab:ga_classic_weighted_final}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+%	xlabel={Generation},
+	ylabel={A},
+	xmin=1, xmax=30,
+	ymin=0.6, ymax=1,
+    grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.6,0.7,0.8,0.9,1},
+	thick
+	]
+	
+	\addplot[
+	color=Maroon
+	]
+	coordinates {
+		(1,0.846617612122516)(2,0.945169707132505)(3,0.686185321911442)
+		(4,0.635391880114644)(5,0.741875275061889)(6,0.741875275061889)
+		(7,0.732155512378616)(8,0.775578685813760)(9,0.743785928735175)
+		(10,0.743785928735175)(11,0.757533941052583)(12,0.785476285913808)
+		(13,0.785895602859595)(14,0.803612148048867)(15,0.820560794469268)
+		(16,0.814418644574798)(17,0.817525500030851)(18,0.809111673028719)
+		(19,0.816070097329638)(20,0.815637998888346)(21,0.813705102461688)
+		(22,0.815690431932833)(23,0.815517137553180)(24,0.815517137553180)
+		(25,0.815353069534198)(26,0.815868881606655)(27,0.825692496498711)
+		(28,0.815308753557013)(29,0.816773883289793)(30,0.816995005947158)
+	};
+	
+	\end{axis}
+	\end{tikzpicture}
+
+	\begin{tikzpicture}
+	\begin{axis}[
+	ylabel={$\alpha$},
+	xmin=1, xmax=30,
+	ymin=0.8, ymax=1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.8,0.85,0.9,0.95,1},
+	thick
+	]
+	
+	\addplot[
+	color=Maroon
+	]
+	coordinates {
+		(1,0.807304104758228)(2,0.807304104758228)(3,0.944409289353833)
+		(4,0.859921322048516)(5,0.916860139599848)(6,0.916860139599848)
+		(7,0.888463783458492)(8,0.903226651793137)(9,0.935606267534623)
+		(10,0.958038312299642)(11,0.958038312299642)(12,0.958038312299642)
+		(13,0.932466246978050)(14,0.923030423935558)(15,0.911376532519616)
+		(16,0.911376532519616)(17,0.894144784683887)(18,0.884143786894717)
+		(19,0.894144784683887)(20,0.849437545449693)(21,0.892107817478434)
+		(22,0.923568595351979)(23,0.906003036557694)(24,0.906003036557694)
+		(25,0.931929326970839)(26,0.913402075446632)(27,0.933810236925943)		(28,0.933810236925943)(29,0.940500000000000)(30,0.940500000000000)	
+	};
+	
+	\end{axis}
+	\end{tikzpicture}
+
+	\begin{tikzpicture}
+	\begin{axis}[
+	ylabel={$\beta$},
+	xmin=1, xmax=30,
+	ymin=-0.5, ymax=0.5,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.5,-0.25,0,0.25,0.5},
+	thick
+	]
+	
+	\addplot[
+	color=Maroon
+	]
+	coordinates {
+	(1,-0.383570164339162)(2,-0.209067239339800)(3,-0.346945447394620)
+	(4,0.203314842137601)(5,0.211317604599334)(6,0.221883484829301)
+	(7,0.134575000183786)(8,0.150040172965104)(9,0.128552630840732)
+	(10,0.128552630840732)(11,0.0924247538988270)(12,0.0924247538988270)
+	(13,0.0696849041430703)(14,0.0876972336644854)(15,0.0588128772541681)
+	(16,0.0588128772541681)(17,0.0481057225684876)(18,0.0596059416498790)
+	(19,0.0596059416498790)(20,0.0595554726646533)(21,0.0620742434800105)
+	(22,0.0619325894560293)(23,0.0597591278277150)(24,0.0597591278277150)
+	(25,0.0606863986765927)(26,0.0607556620243750)(27,0.0633912791535188)
+	(28,0.0607681427718138)(29,0.0609861619403020)(30,0.0607868744138922)
+	};
+	\end{axis}
+	\end{tikzpicture}
+
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	xlabel={Generation},
+	ylabel={$\gamma$},
+	xmin=1, xmax=30,
+	ymin=-0.1, ymax=0.1,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.1,-0.05,0,0.05,0.1},
+	thick
+	]
+	
+	\addplot[
+	color=Maroon
+	]
+	coordinates {
+		(1,0.0999415052821818)(2,0.0524929987796510)(3,0.0521746568499797)
+		(4,0.0296226513494849)(5,0.0547827566575863)(6,0.0296226513494849)
+		(7,0.00540555464037581)(8,0.00228429919009436)(9,0.00228429919009436)
+		(10,0.00228429919009436)(11,0.00498059078371382)(12,0.00234127234304952)
+		(13,0.00294145297861557)(14,0.00294145297861557)(15,0.00277665812010004)
+		(16,0.00261202366681348)(17,0.00271992213742177)(18,0.00293279836879291)
+		(19,0.00237952420577038)(20,0.00237952420577038)(21,0.00237952420577038)
+		(22,0.00269933620416253)(23,0.00245930491141351)(24,0.00273011191599481)
+		(25,0.00273011191599481)(26,0.00257043305522086)(27,0.00262062997493030)
+		(28,0.00261361171864668)(29,0.00261407624380850)(30,0.00273011191599481)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Genetic Algorithm -- Classic BW Model (Proportional crossover)}
+	\label{fig:ga_classic_prop}
+\end{figure}
+
+In contrast to the parameter trends of random and weighted crossover strategies,
+the proportional crossover strategy shows a smoother trend. 
+This is especially noticeable for parameters $A$, $\beta$ and $\gamma$.
+
+As for the weighted crossover method, it is possible to see an almost
+immediate setting of parameters $\beta$ and $\gamma$, as it happens
+for both around generation 7.
+
+The final values for each parameter using this crossover strategy
+are in Table~\ref{tab:ga_classic_prop_final}.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l c c c c}
+		\toprule
+		\textbf{Parameter}		& $A$	& $\alpha$	& $\beta$	& $\gamma$ 	\\ \midrule
+		\textbf{Final value}	& $0.81699$	& $0.94050$	& $0.06078$ & $0.00273$	\\ \bottomrule
+	\end{tabular}
+	\caption{Weighted crossover -- Final values (Classic BW model)}
+	\label{tab:ga_classic_prop_final}
+\end{table}
+
+Figure~\ref{fig:ga_classic_res} shows how the hysteresis loop shows up
+with the final parameters present in Table~\ref{tab:ga_classic_prop_final}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Images/ga_prop_final}
+	\caption{Hysteresis loop result using genetic algorithm's parameters (proportional crossover approach)}
+	\label{fig:ga_classic_res}
+\end{figure}
+
+\subsubsection{Modified Firefly Algorithm -- Classic Bouc-Wen Model}
+
+Table~\ref{tab:mfa_classic_params} contains the parameters used for the
+modified firefly algorithm approach. 
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c}
+		\toprule
+		\textbf{Parameter} & \textbf{Description} \\ \toprule
+		$N$			& $30$ \\
+		$G$			& $30$ \\
+		$d$			& $4$  \\
+		$L$			& $\left[0, 0.5, -0.5, -0.5\right]$ \\
+		$U$			& $\left[2, 0.99, 0.5, 0.5\right]$ \\ 
+		$a$			& $1.1$ \\
+		$b$			& $0.3$ \\ \bottomrule
+	\end{tabular}
+	\caption{Parameters for the genetic algorithm}
+	\label{tab:mfa_classic_params}
+\end{table}
+
+Figure~\ref{fig:mfa_classic_trend} shows the trend of Bouc-Wen parameters
+$A$, $\alpha$, $\beta$ and $\gamma$ using the Modified Firefly Algorithm.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ylabel={A},
+	xmin=1, xmax=30,
+	ymin=0.5, ymax=1.5,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.5,0.75,1,1.25,1.5},
+	thick]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,1.06869060925092)(2,1.07031310017167)(3,0.930245427082584)
+		(4,0.936679613305865)(5,0.936679613305865)(6,0.936679613305865)
+		(7,0.960367546450692)(8,0.919402031004002)(9,0.919402031004002)
+		(10,0.919402031004002)(11,0.927525757993710)(12,0.921703837572361)
+		(13,0.921703837572361)(14,0.921703837572361)(15,0.921703837572361)
+		(16,0.921703837572361)(17,0.921703837572361)(18,0.921703837572361)
+		(19,0.921703837572361)(20,0.921703837572361)(21,0.928354088631171)
+		(22,0.928354088631171)(23,0.928354088631171)(24,0.922151802845455)
+		(25,0.922151802845455)(26,0.925594763845607)(27,0.925594763845607)
+		(28,0.923707972405618)(29,0.925963112330994)(30,0.925963112330994)
+	};
+	
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	ylabel={$\alpha$},
+	xmin=1, xmax=30,
+	ymin=0.5, ymax=1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.5,0.625,0.75,0.875,1},
+	thick
+	]
+	
+	\addplot[
+	color=Maroon
+	]
+	coordinates {
+		(1,0.550976413814157)(2,0.623490876234948)(3,0.777128984609912)
+		(4,0.715106724722959)(5,0.715106724722959)(6,0.715106724722959)
+		(7,0.830987001080587)(8,0.797556605573597)(9,0.797556605573597)
+		(10,0.797556605573597)(11,0.775232834887466)(12,0.799023435255703)
+		(13,0.799023435255703)(14,0.799023435255703)(15,0.799023435255703)
+		(16,0.799023435255703)(17,0.799023435255703)(18,0.799023435255703)
+		(19,0.799023435255703)(20,0.799023435255703)(21,0.801751730639454)
+		(22,0.801751730639454)(23,0.801751730639454)(24,0.800992660349603)
+		(25,0.800992660349603)(26,0.804812870702901)(27,0.804812870702901)
+		(28,0.804148278131032)(29,0.806209042629755)(30,0.806209042629755)	
+	};
+	
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	ylabel={$\beta$},
+	xmin=1, xmax=30,
+	ymin=-0.5, ymax=0.5,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.5,-0.25,0,0.25,0.5},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,0.266001570301431)(2,-0.0435908362222465)(3,0.107569352046298)
+		(4,0.0310859001662921)(5,0.0310859001662921)(6,0.0310859001662921)
+		(7,0.0440423469108267)(8,-0.00952233930470358)(9,-0.00952233930470358)
+		(10,-0.00952233930470358)(11,0.0105856910126518)(12,0.00911806671740018)
+		(13,0.00911806671740018)(14,0.00911806671740018)(15,0.00911806671740018)
+		(16,0.00911806671740018)(17,0.00911806671740018)(18,0.00911806671740018)
+		(19,0.00911806671740018)(20,0.00911806671740018)(21,0.00915095605160595)
+		(22,0.00915095605160595)(23,0.00915095605160595)(24,0.00878879253828613)
+		(25,0.00878879253828613)(26,0.00740178743614416)(27,0.00740178743614416)
+		(28,0.00901025687938335)(29,0.00806867272972272)(30,0.00806867272972272)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	xlabel={Generation},
+	ylabel={$\gamma$},
+	xmin=1, xmax=30,
+	ymin=-0.1, ymax=0.1,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=12cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.1,-0.05,0,0.05,0.1},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,-0.0691733544526680)(2,-0.0207321319806590)(3,-0.00302967769376153)
+		(4,-0.000441510968489555)(5,-0.000441510968489555)(6,-0.000441510968489555)
+		(7,-0.00983967294117288)(8,0.000890856083589599)(9,0.000890856083589599)
+		(10,0.000890856083589599)(11,-0.00369252054175541)(12,-0.000756154478913090)
+		(13,-0.000756154478913090)(14,-0.000756154478913090)(15,-0.000756154478913090)
+		(16,-0.000756154478913090)(17,-0.000756154478913090)(18,-0.000756154478913090)
+		(19,-0.000756154478913090)(20,-0.000756154478913090)(21,-0.00155480896080897)
+		(22,-0.00155480896080897)(23,-0.00155480896080897)(24,-0.00106283248509903)
+		(25,-0.00106283248509903)(26,-0.00157157076493920)(27,-0.00157157076493920)
+		(28,-0.00112928693805224)(29,-0.000866865925248103)(30,-0.000866865925248103)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Modified Firefly Algorithm -- Classic BW Model}
+	\label{fig:mfa_classic_trend}
+\end{figure}
+
+
+\subsection{Time Comparison}
+\label{sec:5.comparison_time}

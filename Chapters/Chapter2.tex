@@ -3,36 +3,63 @@
 \chapter{Composition of the Thesis}
 \label{Chapter2}
 
+This dissertation is divided into chapters as follows.
 
+Chapter~\ref{ch:muscle} describes the McKibben artificial muscle, its general applications
+as well as the pros and drawbacks of using this kind of actuator.
 
+Chapter~\ref{ch:model} concerns the process of obtaining a simplified model
+from real data through model identification techniques.
+After this, a hysteresis component is introduced in the model,
+namely the Bouc-Wen model of hysteresis,
+to grant a better fit between simulated and real data.
+This step is essential so that this model can be
+used together with model-based control techniques
+so that it is possible to precisely control the muscle's position.
+Two different versions of the Bouc-Wen model have been studied and introduced,
+and their differences are highlighted in this Chapter.
 
+Chapter~\ref{ch:optimization} introduces the concept of \textit{Evolutionary Algorithm}
+(EA) and \textit{Metaheuristic Optimization} (MO).
+Three methods belonging to these categories of optimization techniques have been developed
+in order to find the best selection of parameters for the hysteresis model, 
+and grant the best fit possible.
 
+\begin{itemize}[noitemsep]
+	\item \textbf{Evolutionary Algorithms} simulate the process of evolutio
+	that characterizes biological systems.
+	
+	A \textit{Genetic Algorithm}~\cite{fleming2001genetic} (GA) approach
+	has been studied and implemented to find a set of parameters
+	that could provide a good fit between simulated and experimental values.
+	\item \textbf{Metaheuristic Optimization} (MO) algorithm do not guarantee 
+	that a globally optimal solution may be found, but are designed to find,
+	generate or select a set of parameters that may provide a sufficiently good
+	solution to an optimization problem. Metaheuristics sample a set of solutions
+	which is too large to be completely sampled. 
+	One of the main advantages of this method is that they may be used for a variety
+	of problems with high performance.
+	
+	Two methods belonging to this category have been studied and developed:
+	the \textit{Firefly Algorithm}~\cite{yang2010nature}, which mimics the
+	behaviour of fireflies, and \textit{Particle Swarm Optimization}~\cite{kennedy2011particle},
+	which iteratively tries to improve a candidate solution
+	with regard to a given measure of quality.
+	
+\end{itemize}
 
+The performance of each algorithm, based both on calculation time and fit result,
+is compared in Sections~\ref{sec:5.comparison_time} and~\ref{sec:5.comparison_res}.
 
+Chapter~\ref{ch:control} covers the development and application of a PI control,
+as well as the tentative development of a model predictive control.
 
+Chapter~\ref{ch:conclusion} lists the conclusions and gives mentions for future works.
 
+A series of appendices follows the chapters.
 
+Appendix~\ref{app:algorithms} contains
+all scripts and algorithms code used for this work, all thoroughly described.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Appendix~\ref{app:bouc-wen} covers the Bouc-Wen model of hysteresis.
 

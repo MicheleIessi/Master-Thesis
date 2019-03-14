@@ -1,6 +1,7 @@
 % Modelling with identification and Hysteresis consideration
 
 \chapter{Modelling of McKibben Artificial Muscles}
+\label{ch:model}
 
 In this Chapter, the muscle models used as nominal models for model-based control are derived.
 
@@ -316,7 +317,6 @@ G(z) = \dfrac{L(z)}{P(z)} = \dfrac{24.9366\ z^{-1}}{1-0.9618\ z^{-1}}
 \label{eq:disc_tf}
 \end{align}
 
-{\color{red}Se necessario, è possibile usare una funzione di trasferimento con due poli e due zeri invece di una con un polo ed uno zero}
 
 The fit of this transfer function with respect to experimental data is shown
 in Figure~\ref{fig:fit}.
@@ -331,8 +331,6 @@ in Figure~\ref{fig:fit}.
 It is possible to raise the number of poles and zeros of the transfer function
 in order to improve its fit with respect to experimental data. 
 The trade-off is that the resulting transfer function will be more complex.
-
-{\color{red}Aggiungere diagramma pressione-displacement sperimentale e il corrispettivo diagramma derivante dalla funzione di trasferimento identificata}
 
 The transfer function in Equation~\ref{eq:disc_tf} can be written rewritten as follows
 

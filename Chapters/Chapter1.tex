@@ -31,7 +31,8 @@ These muscles can be used as actuators of rehabilitation systems due to the foll
 \end{itemize}
 
 However, there are drawbacks: it is well known that the muscle has poor control performance
-due to the existence of strong nonlinearities, such as hysteresis and saturation characteristics.
+due to the existence of strong nonlinearities, such as hysteresis,
+cavitation and saturation characteristics.
 Furthermore, the wear of the materials (nylon sleeve and rubber tube) may cause a shorter lifetime with respect to
 other actuators.
 
@@ -53,10 +54,11 @@ Adding a hysteresis component to a linear model makes it more complex,
 so the choice of an appropriate hysteresis modeling technique is crucial to achieve
 good control performance.
 
-This allows to get a model having good fit with respect to the real one
-and apply a model-based control approach, namely the \textbf{Model Predictive Control} (MPC).
-Further details about the developed controller are in Chapter~\ref{Chapter6},
-and the theory behind MPC can be found in Appendix~\ref{AppendixA}.
+This allows to get a model having good fit with respect to the real one.
+After this, it is possibly to try applying a model-based control approach,
+namely the \textbf{Model Predictive Control} (MPC).
+Further details about the development of controllers are in Chapter~\ref{Chapter6},
+and the theory behind MPC can be found in Appendix~\ref{app:mpc}.
 
 \section{Aim of the Study}
 
@@ -64,14 +66,14 @@ The aim of this dissertation is to get precise control of the displacement for
 a tap water-driven McKibben artificial muscle. To do so, a list of steps will be followed:
 
 \begin{enumerate}
-	\item \textit{Derivation of a Simple Linear Model} \smallskip \\ 
+	\item \textit{Derivation of a simple linear model} \smallskip \\ 
 	Using linear identification techniques, it is possible to map the input pressure to the output displacement,
 	and get a precise yet simple linear model of the muscle.
 	While in pneumatic artificial muscles it is required to take into account
 	the temperature dynamics and the compressibility of air, using water as the muscle
 	allows to disregard them. This grants a simpler model of the muscle.
 	
-	\item \textit{Introduction of a Hysteresis Component} \smallskip \\ 
+	\item \textit{Introduction of hysteresis component} \smallskip \\ 
 	The linear identification method grants a very simple yet linear model
 	that does not take nonlinearities into account. 
 	The biggest source of nonlinearity for the McKibben muscle is hysteresis.
@@ -79,17 +81,18 @@ a tap water-driven McKibben artificial muscle. To do so, a list of steps will be
 	so that it will	better follow the actual behaviour of the muscle.
 	This step is essential to get good control performance.
 	
-	\item \textit{Controller Design} \smallskip \\
-	The application of Model Predictive Control and Adaptive Control techniques are
-	proposed, using the muscle model obtained from linear system identification and
-	modified with the introduction of the hysteresis component.
-	these results are confronted with PI and PID control.
+	\item \textit{Hysteresis parameter estimation using optimization algorithms}\smallskip \\
+	Evolutionary algorithms and metaheuristic optimization can be used in order
+	to find suitable parameters for the hysteresis model. 
+	This procedure is useful to grant a good fit between real and simulated data,
+	so that it is possible to make use of a precise plant model in a model-based control.
 	
-	\item \textit{Adaptive Parameter Estimation} \smallskip \\
-	Model's parameters change according to the load of the muscle
-	and its working conditions. To retain good control performance,
-	an adaptive estimation is needed to update the controller, and achieve
-	perpetual stable results. To do so, a \{Genetic Algorithm\}/\{LS\} approach is proposed.
+	\item \textit{Controller Design} \smallskip \\
+	The application of Proportional-Integrative and Model Predictive Control
+	techniques are proposed, using the muscle model obtained from
+	linear system identification and modified with the introduction
+	of the hysteresis component.
+	
 \end{enumerate}
 
 
