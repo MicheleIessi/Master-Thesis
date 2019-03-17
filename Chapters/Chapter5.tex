@@ -73,6 +73,7 @@ a fixed fit value, the algorithm stops and the best individual is chosen
 as the solution to the optimization problem.
 
 \subsection{Genetic Algorithm}
+\label{sec:5.ga}
 
 A genetic algorithm (GA)~\cite{fleming2001genetic} is a kind of evolutionary algorithm inspired
 by the concept of natural selection that permeates a biological evolutionary process.
@@ -91,8 +92,6 @@ The general outline of the procedure is shown in Algorithm~\ref{alg:ga}.
 The description and peculiarities of each step are discussed in Section~\ref{sec:5.steps}.
 The genetic algorithm also makes use of several parameters, which are summarized
 in Table~\ref{tab:ga_params}.
-
-% todo: replicare una tabella simile per gli algoritmi metaeuristici
 
 \begin{table}[]
 	\centering
@@ -147,7 +146,7 @@ in Table~\ref{tab:ga_params}.
 \end{algorithm}
 
 \subsubsection{Algorithm Description}
-%TODO inserire la descrizione dell'algoritmo genetico
+
 
 \label{sec:5.steps}
 \subsubsection{Initialization Step}
@@ -234,15 +233,12 @@ the relation of Equation~\ref{eq:sum_1} arises.
 
 \subsubsection{Crossover Step}
 
-% TODO: Descrivere il crossover, comprendendo le varie probabilità e i 3 tipi diversi di crossover
-
 The crossover step serves the purpose of creating two new individuals (\textit{offspring})
 starting from two \textit{parents}. The characteristics of the offspring will thus
 largely depend on their parents' ones.
 
 Three different crossover policies have been developed for this purpose:
 
-%TODO: Sarebbe bello inserire delle immagini per spiegare il riposizionamento dei vari geni, almeno per quanto riguarda il random crossover
 
 \begin{itemize}[noitemsep]
 	\item \textbf{Random crossover}
@@ -630,8 +626,6 @@ and \textit{gbest} locations. Acceleration is weighted by a random term,
 with separate random numbers generated to dictate acceleration towards
 \textit{pbest} and \textit{gebest} locations.
 
-% todo: considerare se è il caso di inserire la descrizione di ogni algoritmo dentro la overview piuttosto che all'inizio della macro sezione.
-
 \subsubsection{Algorithm Overview}
 
 \begin{algorithm}[H]
@@ -723,7 +717,8 @@ their own personal best and will be inclined to move towards that location.
 
 Simulations have been run on all the algorithms proposed in the previous sections.
 Each one of them has been tested with both the standard and the generalized Bouc-Wen
-model of hysteresis.
+model of hysteresis. The results, for both models and for each algorithm,
+are respectively in Section~\ref{sec:5.comp_res_classic} and~\ref{sec:5.comp_res_gen}.
 
 Since the generalized version of the hysteresis component consists of 8 variables
 it is safe to assume beforehand that the execution time of the algorithms would be higher.
@@ -734,16 +729,15 @@ Section~\ref{sec:5.comparison_time}.
 
 \subsection{System Specifications}
 
+%TODO scrivere le system specifications del pc
 
-
-\subsection{Solution Comparison}
-\label{sec:5.comparison_res}
+\subsection{Solution Comparison -- Classic Bouc-Wen Model}
+\label{sec:5.comp_res_classic}
 
 This Section serves the purpose of comparing the solutions found using the
-algorithm previously described when trying to find suitable parameters
-both for the classic and the generalized Bouc-Wen model of hysteresis.
+algorithms previously described when trying to find suitable parameters
+for the classic Bouc-Wen model of hysteresis.
 
-%TODO: inserire dei plot per l'andamento delle variabili per tutti e 3 gli algoritmi e le 2 versioni del modello isteretico
 \subsubsection{Genetic Algorithm -- Classic Bouc-Wen Model}
 
 Table~\ref{tab:ga_classic_params} contains the parameters used
@@ -754,24 +748,28 @@ random, weighted and proportional.
 Figures~\ref{fig:ga_classic_rand},~\ref{fig:ga_classic_w}
 and~\ref{fig:ga_classic_prop} show the trend of the classic Bouc-Wen model
 parameters $A$, $\alpha$, $\beta$ and $\gamma$ depending on the
-crossover strategy used.
+crossover strategy used~\footnote{Figure~\ref{fig:ga_classic_rand} shows, for each generation,
+the parameters of the best individual, i.e. the individual with the highest fit value.
+This will be the standard way of presenting trends from now on.}.
 
 It is important to note that due to how the three strategies have been developed,
 the performance of the random and weighted methods depend strictly on
 the initial population, as the individuals' chromosomes are always only swapped.
 The final result will approach the best possible solution attainable
-using the chromosomes of the initial population. 
+using the chromosomes of the initial population~\footnote{
+	Apart from eventual changes introduced in case of mutations.}. 
 However, it is certainly possible that the final fit may not be acceptable.
 
 Due to this fact, the proportional crossover strategy proved to be the best
 as it generates new chromosomes (and thus, completely new individuals)
-each generation.
+each generation. Regardless, a decreasing trend in each parameter is to be expected
+due to how the proportional strategy has been developed.
 
-\begin{table}
+\begin{table}[]
 	\centering
 	\begin{tabular}{c c}
 		\toprule
-		\textbf{Parameter} & \textbf{Description} \\ \toprule
+		\textbf{Parameter} & \textbf{Value} \\ \toprule
 		$N$			& $30$ \\
 		$G$			& $30$ \\
 		$d$			& $4$  \\
@@ -781,12 +779,10 @@ each generation.
 		$P{mut}$	& $0.1$ \\
 		$m_m$		& $0.05$ \\	\bottomrule
 	\end{tabular}
-	\caption{Parameters for the genetic algorithm}
+	\caption{Parameters for the Genetic Algorithm approach -- Classic Bouc-Wen model}
 	\label{tab:ga_classic_params}
 \end{table}
 
-%TODO: Per il GA sarebbe interessante mostrare le differenze tra i 3 tipi di crossover
-% I dati che seguono sono stati ottenuti usando proportional
 
 \begin{figure}[H]
 	\centering
@@ -798,7 +794,7 @@ each generation.
 	ymin=0.6, ymax=1,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={0.6,0.7,0.8,0.9,1},
 	thick]
@@ -827,7 +823,7 @@ each generation.
 	ymin=0.5, ymax=0.9,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={0.5,0.6,0.7,0.8,0.9},
 	thick]
@@ -856,7 +852,7 @@ each generation.
 	ymin=-0.3, ymax=0.5,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={-0.3,-0.1,0.1,0.3,0.5},
 	thick]
@@ -886,7 +882,7 @@ each generation.
 	ymin=-0.1, ymax=0.1,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={-0.1,-0.05,0,0.05,0.1},
 	thick]
@@ -907,9 +903,21 @@ each generation.
 	\end{axis}
 	\end{tikzpicture}
 	
-	\caption{Genetic Algorithm -- Classic BW Model (Random crossover)}
+	\caption{Genetic Algorithm -- Classic Bouc-Wen Model \newline (Random crossover)}
 	\label{fig:ga_classic_rand}
 \end{figure}
+
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l c c c c}
+		\toprule
+		\textbf{Parameter}		& $A$	& $\alpha$	& $\beta$	& $\gamma$ 	\\ \midrule
+		\textbf{Final value}	& $0.76158$	& $0.76455$	& $0.18539$ & $0.04647$	\\ \bottomrule
+	\end{tabular}
+	\caption{Random crossover -- Final values (Classic Bouc-Wen model)}
+	\label{tab:ga_classic_random_final}
+\end{table}
 
 A series of sharp changes is noticeable in Figure~\ref{fig:ga_classic_rand}.
 As said beforehand, this behaviour is due to the fact that the set of chromosomes
@@ -922,17 +930,6 @@ This behaviour is probably due to the current best individual being near a local
 The final values for each parameter using this crossover strategy
 are in Table~\ref{tab:ga_classic_random_final}.
 
-\begin{table}[H]
-	\centering
-	\begin{tabular}{l c c c c}
-		\toprule
-		\textbf{Parameter}		& $A$	& $\alpha$	& $\beta$	& $\gamma$ 	\\ \midrule
-		\textbf{Final value}	& $0.76158$	& $0.76455$	& $,0.18539$ & $0.04647$	\\ \bottomrule
-	\end{tabular}
-	\caption{Random crossover -- Final values (Classic BW model)}
-	\label{tab:ga_classic_random_final}
-\end{table}
-
 \begin{figure}[H]
 	\centering
 	\begin{tikzpicture}
@@ -943,7 +940,7 @@ are in Table~\ref{tab:ga_classic_random_final}.
 	ymin=0.5, ymax=0.9,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={0.5,0.6,0.7,0.8,0.9},
 	thick]
@@ -972,7 +969,7 @@ are in Table~\ref{tab:ga_classic_random_final}.
 	ymin=0.5, ymax=1,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={0.5,0.625,0.75,0.875,1},
 	thick]
@@ -1001,7 +998,7 @@ are in Table~\ref{tab:ga_classic_random_final}.
 	ymin=-0.5, ymax=0.5,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={-0.5,-0.25,0,0.25,0.5},
 	thick]
@@ -1031,7 +1028,7 @@ are in Table~\ref{tab:ga_classic_random_final}.
 	ymin=-0.1, ymax=0.1,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={-0.1,-0.05,0,0.05,0.1},
 	thick]
@@ -1052,7 +1049,7 @@ are in Table~\ref{tab:ga_classic_random_final}.
 	\end{axis}
 	\end{tikzpicture}
 	
-	\caption{Genetic Algorithm -- Classic BW Model (Weighted crossover)}
+	\caption{Genetic Algorithm -- Classic Bouc-Wen Model \newline (Weighted~crossover)}
 	\label{fig:ga_classic_w}
 \end{figure}
 
@@ -1076,7 +1073,7 @@ are in Table~\ref{tab:ga_classic_weighted_final}.
 		\textbf{Parameter}		& $A$	& $\alpha$	& $\beta$	& $\gamma$ 	\\ \midrule
 		\textbf{Final value}	& $0.78982$	& $0.94050$	& $-0.24214$ & $0.01601$	\\ \bottomrule
 	\end{tabular}
-	\caption{Weighted crossover -- Final values (Classic BW model)}
+	\caption{Weighted crossover -- Final values (Classic Bouc-Wen model)}
 	\label{tab:ga_classic_weighted_final}
 \end{table}
 
@@ -1090,7 +1087,7 @@ are in Table~\ref{tab:ga_classic_weighted_final}.
 	ymin=0.6, ymax=1,
     grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={0.6,0.7,0.8,0.9,1},
 	thick
@@ -1122,7 +1119,7 @@ are in Table~\ref{tab:ga_classic_weighted_final}.
 	ymin=0.8, ymax=1,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={0.8,0.85,0.9,0.95,1},
 	thick
@@ -1153,7 +1150,7 @@ are in Table~\ref{tab:ga_classic_weighted_final}.
 	ymin=-0.5, ymax=0.5,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={-0.5,-0.25,0,0.25,0.5},
 	thick
@@ -1187,7 +1184,7 @@ are in Table~\ref{tab:ga_classic_weighted_final}.
 	grid=both,	      
 	scaled y ticks = false,		
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={-0.1,-0.05,0,0.05,0.1},
 	thick
@@ -1210,7 +1207,7 @@ are in Table~\ref{tab:ga_classic_weighted_final}.
 	};
 	\end{axis}
 	\end{tikzpicture}
-	\caption{Genetic Algorithm -- Classic BW Model (Proportional crossover)}
+	\caption{Genetic Algorithm -- Classic Bouc-Wen Model (Proportional crossover)}
 	\label{fig:ga_classic_prop}
 \end{figure}
 
@@ -1232,30 +1229,30 @@ are in Table~\ref{tab:ga_classic_prop_final}.
 		\textbf{Parameter}		& $A$	& $\alpha$	& $\beta$	& $\gamma$ 	\\ \midrule
 		\textbf{Final value}	& $0.81699$	& $0.94050$	& $0.06078$ & $0.00273$	\\ \bottomrule
 	\end{tabular}
-	\caption{Weighted crossover -- Final values (Classic BW model)}
+	\caption{Weighted crossover -- Final values (Classic Bouc-Wen model)}
 	\label{tab:ga_classic_prop_final}
 \end{table}
 
-Figure~\ref{fig:ga_classic_res} shows how the hysteresis loop shows up
+Figure~\ref{fig:ga_classic_res} shows how the hysteresis loop behaves
 with the final parameters present in Table~\ref{tab:ga_classic_prop_final}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{Images/ga_prop_final}
-	\caption{Hysteresis loop result using genetic algorithm's parameters (proportional crossover approach)}
+	\caption{Hysteresis loop result -- Genetic Algorithm's parameters (classic Bouc-Wen model, proportional crossover approach)}
 	\label{fig:ga_classic_res}
 \end{figure}
 
 \subsubsection{Modified Firefly Algorithm -- Classic Bouc-Wen Model}
 
 Table~\ref{tab:mfa_classic_params} contains the parameters used for the
-modified firefly algorithm approach. 
+Modified Firefly Algorithm approach. 
 
 \begin{table}[H]
 	\centering
 	\begin{tabular}{c c}
 		\toprule
-		\textbf{Parameter} & \textbf{Description} \\ \toprule
+		\textbf{Parameter} & \textbf{Value} \\ \toprule
 		$N$			& $30$ \\
 		$G$			& $30$ \\
 		$d$			& $4$  \\
@@ -1264,7 +1261,7 @@ modified firefly algorithm approach.
 		$a$			& $1.1$ \\
 		$b$			& $0.3$ \\ \bottomrule
 	\end{tabular}
-	\caption{Parameters for the genetic algorithm}
+	\caption{Parameters for the Modified Firefly Algorithm approach -- Classic Bouc-Wen model}
 	\label{tab:mfa_classic_params}
 \end{table}
 
@@ -1280,7 +1277,7 @@ $A$, $\alpha$, $\beta$ and $\gamma$ using the Modified Firefly Algorithm.
 	ymin=0.5, ymax=1.5,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={0.5,0.75,1,1.25,1.5},
 	thick]
@@ -1309,7 +1306,7 @@ $A$, $\alpha$, $\beta$ and $\gamma$ using the Modified Firefly Algorithm.
 	ymin=0.5, ymax=1,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={0.5,0.625,0.75,0.875,1},
 	thick
@@ -1341,7 +1338,7 @@ $A$, $\alpha$, $\beta$ and $\gamma$ using the Modified Firefly Algorithm.
 	ymin=-0.5, ymax=0.5,
 	grid=both,
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={-0.5,-0.25,0,0.25,0.5},
 	thick
@@ -1373,7 +1370,7 @@ $A$, $\alpha$, $\beta$ and $\gamma$ using the Modified Firefly Algorithm.
 	grid=both,	      
 	scaled y ticks = false,		
 	grid style={line width=.1pt, draw=gray!10},
-	width=12cm,height=4cm,
+	width=14cm,height=4cm,
 	xtick={0,5,10,15,20,25,30},
 	ytick={-0.1,-0.05,0,0.05,0.1},
 	thick
@@ -1394,10 +1391,1396 @@ $A$, $\alpha$, $\beta$ and $\gamma$ using the Modified Firefly Algorithm.
 	};
 	\end{axis}
 	\end{tikzpicture}
-	\caption{Modified Firefly Algorithm -- Classic BW Model}
+	\caption{Modified Firefly Algorithm -- Classic Bouc-Wen Model}
 	\label{fig:mfa_classic_trend}
 \end{figure}
 
+Conversely to the Genetic Algorithm, the Modified Firefly Approach
+has reached good fit values in each run of the algorithm for the classic Bouc-Wen model.
+
+Moreover, it immediately stands out how the trend of the four parameters
+is smoother with respect to the GA approach, for each of the three crossover strategies.
+
+The final values found for each parameter using the MFA approach are shown
+in Table~\ref{tab:mfa_final_classic}.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l c c c c}
+		\toprule
+		\textbf{Parameter}		& $A$	& $\alpha$	& $\beta$	& $\gamma$ 	\\ \midrule
+		\textbf{Final value}	& $0.92596$	& $0.80620$	& $0.00806$ & $-0.00086$ \\
+		\bottomrule
+	\end{tabular}
+	\caption{Modified Firefly Algorithm -- Final values (Classic Bouc-Wen model)}
+	\label{tab:mfa_final_classic}
+\end{table}
+
+Figure~\ref{fig:mfa_classic_hys} shows how the hysteresis loop behaves
+with the final parameters of Table~\ref{tab:mfa_final_classic}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Images/mfa_prop_final}
+	\caption{Hysteresis loop result using Modified Firefly Algorithm parameters (classic Bouc-Wen model)}
+	\label{fig:mfa_classic_hys}
+\end{figure}
+
+\subsubsection{Particle Swarm Optimization -- Classic Bouc-Wen Model}
+
+Table~\ref{tab:pso_classic_params} contains the parameters used for the
+Particle Swarm Optimization approach. 
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c}
+		\toprule
+		\textbf{Parameter} & \textbf{Value} \\ \toprule
+		$N$			& $10$ \\
+		$G$			& $30$ \\
+		$d$			& $4$  \\
+		$L$			& $\left[0, 0, -0.5, -0.5\right]$ \\
+		$U$			& $\left[2, 0.9, 0.5, 0.5\right]$ \\ 
+		$a$			& $1.1$ \\
+		$b$			& $0.3$ \\ 
+		$c_1$		& $2$	\\
+		$c_2$		& $2$	\\ 
+		$V_{max}$	& $\left[20,20,20,20\right]$ \\ \bottomrule
+	\end{tabular}
+	\caption{Parameters for the Particle Swarm Optimization approach -- Classic Bouc-Wen model}
+	\label{tab:pso_classic_params}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ylabel={A},
+	xmin=1, xmax=30,
+	ymin=0, ymax=1.2,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0,0.3,0.6,0.9,1.2},
+	thick]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,0.185863237644164)(2,1.02632063487202)(3,0.288380617321494)
+		(4,0.288380617321494)(5,0.288380617321494)(6,0.208683447421379)
+		(7,0.208683447421379)(8,0.208683447421379)(9,0.208683447421379)
+		(10,0.208683447421379)(11,0.208683447421379)(12,0.0936642393040911)
+		(13,0.0936642393040911)(14,0.0936642393040911)(15,0.0936642393040911)
+		(16,0.0936642393040911)(17,0)(18,0)(19,0)(20,0.156627431188312)
+		(21,0.229294550577293)(22,0.229294550577293)(23,0.229294550577293)
+		(24,0.193037101921784)(25,0.221355518470106)(26,0.211708341239334)
+		(27,0.205145183300729)(28,0.205145183300729)(29,0.204949632696870)
+		(30,0.206511896266668)
+	};
+	
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	ylabel={$\alpha$},
+	xmin=1, xmax=30,
+	ymin=0.5, ymax=1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.5,0.625,0.75,0.875,1},
+	thick
+	]
+	
+	\addplot[
+	color=Maroon
+	]
+	coordinates {
+		(1,0.756220545192621)(2,0.688144395916196)(3,0.747916747206713)
+		(4,0.747916747206713)(5,0.747916747206713)(6,0.705433678358796)
+		(7,0.705433678358796)(8,0.705433678358796)(9,0.705433678358796)
+		(10,0.705433678358796)(11,0.705433678358796)(12,0.900000000000000)
+		(13,0.900000000000000)(14,0.900000000000000)(15,0.900000000000000)
+		(16,0.900000000000000)(17,0.900000000000000)(18,0.900000000000000)
+		(19,0.900000000000000)(20,0.900000000000000)(21,0.900000000000000)
+		(22,0.900000000000000)(23,0.900000000000000)(24,0.900000000000000)
+		(25,0.900000000000000)(26,0.900000000000000)(27,0.900000000000000)
+		(28,0.900000000000000)(29,0.900000000000000)(30,0.900000000000000)	
+	};
+	
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	ylabel={$\beta$},
+	xmin=1, xmax=30,
+	ymin=-0.5, ymax=0.5,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.5,-0.25,0,0.25,0.5},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,-0.144486390209083)(2,0.153809389216694)(3,-0.108100843747831)
+		(4,-0.108100843747831)(5,-0.108100843747831)(6,-0.0293705905740140)
+		(7,-0.0293705905740140)(8,-0.0293705905740140)(9,-0.0293705905740140)
+		(10,-0.0293705905740140)(11,-0.0293705905740140)(12,-0.0239743852941000)
+		(13,-0.0239743852941000)(14,-0.0239743852941000)(15,-0.0239743852941000)
+		(16,-0.0239743852941000)(17,-0.0782885386391373)(18,-0.0782885386391373)
+		(19,-0.0782885386391373)(20,-0.0231738982815848)(21,-0.0611492972263083)
+		(22,-0.0611492972263083)(23,-0.0611492972263083)(24,-0.0167300819866512)
+		(25,-0.0199168329453418)(26,-0.0111377647330169)(27,-0.00520380574948877)
+		(28,-0.00520380574948877)(29,-0.00883235888170176)(30,-0.00650822592915697)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	xlabel={Iteration},
+	ylabel={$\gamma$},
+	xmin=1, xmax=30,
+	ymin=-0.1, ymax=0.1,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=4cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.1,-0.05,0,0.05,0.1},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+		(1,0.0222543785571379)(2,-0.0233438802771272)(3,0.0166923904909300)
+		(4,0.0166923904909300)(5,0.0166923904909300)(6,-0.0298037649915088)
+		(7,-0.0298037649915088)(8,-0.0298037649915088)(9,-0.0298037649915088)
+		(10,-0.0298037649915088)(11,-0.0298037649915088)(12,0.000731539435058728)
+		(13,0.000731539435058728)(14,0.000731539435058728)(15,0.000731539435058728)
+		(16,0.000731539435058728)(17,-0.00796634020356290)(18,-0.00796634020356290)
+		(19,-0.00796634020356290)(20,-0.00618349892532456)(21,-0.0147185482941685)
+		(22,-0.0147185482941685)(23,-0.0147185482941685)(24,-0.0317484900349273)
+		(25,-0.0256008237924044)(26,-0.0288175678749165)(27,-0.0285119507981094)
+		(28,-0.0285119507981094)(29,-0.0285229257459806)(30,-0.0287472123663116)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Particle Swarm Optimization -- Classic Bouc-Wen Model}
+	\label{fig:pso_classic_trend}
+\end{figure}
+
+Figure~\ref{fig:pso_classic_trend} shows the trend of Bouc-Wen parameters
+using the Particle Swarm Optimization approach~\footnote{The values shown in Figure~\ref{fig:pso_classic_trend}
+refer to the particle that attained the best global fit value ($gbest$)
+up until that iteration.}.
+
+It is possible to notice that around iteration 15 two of the four parameters,
+namely $\alpha$ and $\beta$, have already settled and do not change much for
+later iterations. Thus, the particles continue to move in the solution space
+mainly on two coordinates. The remaining parameters $A$ and $\gamma$ stabilize
+over a certain value around iteration 20 and 25, respectively.
+
+The final values found for each parameter using the PSO approach
+are shown in Table~\ref{tab:pso_classic_final}.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l c c c c}
+		\toprule
+		\textbf{Parameter}		& $A$	& $\alpha$	& $\beta$	& $\gamma$ 	\\ \midrule
+		\textbf{Final value}	& $0.20651$	& $0.9$	& $-0.00650$ & $-0.02874$ \\
+		\bottomrule
+	\end{tabular}
+	\caption{Particle Swarm Optimization -- Final values (Classic Bouc-Wen model)}
+	\label{tab:pso_classic_final}
+\end{table}
+
+Figure~\ref{fig:pso_classic_hys} displays how the hysteresis loop is shaped
+using the final parameters of Table~\ref{tab:pso_classic_final}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Images/pso_classic_final}
+	\caption{Hysteresis loop result using Particle Swarm Optimization parameters}
+	\label{fig:pso_classic_hys}
+\end{figure}
+
+\clearpage
+
+\subsection{Solution Comparison -- Generalized Bouc-Wen Model}
+\label{sec:5.comp_res_gen}
+
+This Section serves the purpose of comparing the solutions found using the algorithms
+described in Sections~\ref{sec:5.ga},~\ref{sec:5.mfa} and~\ref{sec:5.pso}
+in order to find suitable parameters for the generalized Bouc-Wen model of hysteresis.
+
+\subsubsection{Genetic Algorithm -- Generalized Bouc-Wen Model}
+
+Table~\ref{tab:ga_gen_params} contains the parameters
+used for all three crossover strategies of the Genetic Algorithm approach.
+
+Figures~\ref{fig:ga_gen_rand},~\ref{fig:ga_gen_w} and~\ref{fig:ga_gen_prop}
+display the trend of the generalized Bouc-Wen model parameters
+$A$, $\alpha$, $\beta_1$, $\beta_2$, $\beta_3$, $\beta_4$, $\beta_5$ and $\beta_6$
+depending on the crossover method used~\footnote{
+As for the classic model, Figure~\ref{fig:ga_gen_rand} shows, for each generation,
+the parameters of the best individual. This will be repeated for subsequent Figures.
+}.
+
+The bounds of parameters $\beta_1,\dots,\beta_6$ is narrower than
+the bounds used for the classic version of the model. This is due to the fact
+that this model is more complex, and thus it is harder to achieve a suitable solution.
+
+It has been observed that the wrong choice of parameters may lead to the
+\emph{explosion} of the output, i.e. computational errors add up to a point
+where the simulated output diverges. The BIBO stability of the Bouc-Wen
+model has been studied and formulated in~\cite{ikhouane2007dynamic}.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c}
+		\toprule
+		\textbf{Parameter} & \textbf{Value} \\ \toprule
+		$N$			& $20$ \\
+		$G$			& $30$ \\
+		$d$			& $8$  \\
+		$L$			& $\left[0, 0.5, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1	\right]$ \\
+		$U$			& $\left[2, 0.99, 0.5, 0.5, 0.5, 0.5, 0.5, 1			\right]$ \\ 
+		$P_{cross}$	& $0.5$ \\
+		$P{mut}$	& $0.1$ \\
+		$m_m$		& $0.05$ \\	\bottomrule
+	\end{tabular}
+	\caption{Parameters for the Genetic Algorithm approach -- Generalized Bouc-Wen model}
+	\label{tab:ga_gen_params}
+\end{table}
+
+% random crossover - generalized bw model
+\begin{figure}[H]
+	\centering
+\begin{tikzpicture}
+\begin{axis}[
+yticklabel style={/pgf/number format/fixed},	
+ylabel={A},
+xmin=1, xmax=30,
+ymin=0, ymax=2,
+grid=both,
+grid style={line width=.1pt, draw=gray!10},
+width=14cm,height=3cm,
+xtick={0,5,10,15,20,25,30},
+ytick={0,0.5,1,1.5,2},
+thick]
+\addplot[color=Maroon]
+coordinates {
+	(1,1.61937670248785)(2,0.0288527422007858)(3,0.0788527422007858)(4,0.0288527422007858)(5,0.910176266978389)(6,1.61209258003043)(7,0)(8,0)(9,0)(10,0)(11,0)(12,0)(13,0)(14,0)(15,0)(16,0)(17,0)(18,0)(19,0)(20,0)(21,0.0500000000000000)(22,0.100000000000000)(23,0.100000000000000)(24,0.100000000000000)(25,0.150000000000000)(26,0.100000000000000)(27,0.100000000000000)(28,0.100000000000000)(29,0.100000000000000)(30,0.100000000000000)
+};
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+yticklabel style={/pgf/number format/fixed},
+ylabel={$\alpha$},
+xmin=1, xmax=30,
+ymin=0.8, ymax=1,
+grid=both,
+grid style={line width=.1pt, draw=gray!10},
+width=14cm,height=3cm,
+xtick={0,5,10,15,20,25,30},
+ytick={0.8,0.85,0.9,0.95,1},
+thick
+]
+
+\addplot[
+color=Maroon
+]
+coordinates {
+(1,0.982913070094558)(2,0.922441481135006)(3,0.972441481135006)(4,0.922441481135006)(5,0.922441481135006)(6,0.872441481135005)(7,0.825081107421489)(8,0.875081107421489)(9,0.875081107421489)(10,0.875081107421489)(11,0.875081107421489)(12,0.925081107421489)(13,0.925081107421489)(14,0.975081107421489)(15,0.975081107421489)(16,0.975081107421489)(17,0.975081107421489)(18,0.990000000000000)(19,0.990000000000000)(20,0.990000000000000)(21,0.990000000000000)(22,0.925081107421489)(23,0.925081107421489)(24,0.925081107421489)(25,0.925081107421489)(26,0.925081107421489)(27,0.925081107421489)(28,0.975081107421489)(29,0.925081107421489)(30,0.975081107421489)
+};
+
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+yticklabel style={/pgf/number format/fixed},
+ylabel={$\beta_1$},
+xmin=1, xmax=30,
+ymin=-0.5, ymax=0.5,
+grid=both,
+grid style={line width=.1pt, draw=gray!10},
+width=14cm,height=3cm,
+xtick={0,5,10,15,20,25,30},
+ytick={-0.5,-0.25,0,0.25,0.5},
+thick
+]
+
+\addplot[color=Maroon]
+coordinates {
+(1,0.386914402744206)(2,0.427964298417024)(3,0.427964298417024)(4,0.427964298417024)(5,0.427964298417024)(6,0.427964298417024)(7,0.00722167306420235)(8,0.00722167306420235)(9,0.00722167306420235)(10,0.00722167306420235)(11,0.00722167306420235)(12,0.0685452893600412)(13,0.0185452893600412)(14,0.0185452893600412)(15,0.0185452893600412)(16,0.0185452893600412)(17,0.0185452893600412)(18,-0.0314547106399588)(19,0.0185452893600412)(20,0.0185452893600412)(21,0.0685452893600412)(22,0.0685452893600412)(23,0.0685452893600412)(24,0.0185452893600412)(25,0.0685452893600412)(26,0.0185452893600412)(27,0.0685452893600412)(28,0.0685452893600412)(29,0.0185452893600412)(30,0.0685452893600412)
+};
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+yticklabel style={/pgf/number format/fixed},
+ylabel={$\beta_2$},
+xmin=1, xmax=30,
+ymin=0, ymax=0.5,
+grid=both,	      
+scaled y ticks = false,		
+grid style={line width=.1pt, draw=gray!10},
+width=14cm,height=3cm,
+xtick={0,5,10,15,20,25,30},
+ytick={0,0.125,0.25,0.375,0.5},
+thick
+]
+
+\addplot[color=Maroon]
+coordinates {
+(1,0.307368605261352)(2,0.118617020744079)(3,0.118617020744079)(4,0.118617020744079)(5,0.118617020744079)(6,0.118617020744079)(7,0.114290753138913)(8,0.0642907531389132)(9,0.0642907531389132)(10,0.0642907531389132)(11,0.0642907531389132)(12,0.468299759288352)(13,0.468299759288352)(14,0.468299759288352)(15,0.468299759288352)(16,0.468299759288352)(17,0.500000000000000)(18,0.500000000000000)(19,0.500000000000000)(20,0.500000000000000)(21,0.500000000000000)(22,0.468299759288352)(23,0.500000000000000)(24,0.468299759288352)(25,0.500000000000000)(26,0.418299759288352)(27,0.468299759288352)(28,0.450000000000000)(29,0.500000000000000)(30,0.500000000000000)
+};
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[
+yticklabel style={/pgf/number format/fixed},
+ylabel={$\beta_3$},
+xmin=1, xmax=30,
+ymin=0.2, ymax=0.4,
+grid=both,	      
+scaled y ticks = false,		
+grid style={line width=.1pt, draw=gray!10},
+width=14cm,height=3cm,
+xtick={0,5,10,15,20,25,30},
+ytick={0.2,0.25,0.3,0.35,0.4},
+thick
+]
+
+\addplot[color=Maroon]
+coordinates {
+(1,0.273026076343718)(2,0.282078656184312)(3,0.282078656184312)(4,0.382078656184312)(5,0.382078656184312)(6,0.382078656184312)(7,0.332560828042939)(8,0.332560828042939)(9,0.332560828042939)(10,0.332560828042939)(11,0.332560828042939)(12,0.325363152415932)(13,0.325363152415932)(14,0.325363152415932)(15,0.325363152415932)(16,0.325363152415932)(17,0.325363152415932)(18,0.325363152415932)(19,0.375363152415932)(20,0.325363152415932)(21,0.375363152415932)(22,0.325363152415932)(23,0.375363152415932)(24,0.325363152415932)(25,0.375363152415932)(26,0.325363152415932)(27,0.325363152415932)(28,0.375363152415932)(29,0.325363152415932)(30,0.375363152415932)
+};
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[
+yticklabel style={/pgf/number format/fixed},
+ylabel={$\beta_4$},
+xmin=1, xmax=30,
+ymin=0, ymax=0.5,
+grid=both,	      
+scaled y ticks = false,		
+grid style={line width=.1pt, draw=gray!10},
+width=14cm,height=3cm,
+xtick={0,5,10,15,20,25,30},
+ytick={0,0.125,0.25,0.375,0.5},
+thick
+]
+
+\addplot[color=Maroon]
+coordinates {
+	(1,0.0891652713175580)(2,0.0397335071068401)(3,0.0397335071068401)(4,0.0897335071068401)(5,0.0897335071068401)(6,0.0897335071068401)(7,0.467683658260978)(8,0.417683658260978)(9,0.417683658260978)(10,0.417683658260978)(11,0.417683658260978)(12,0.427535364587383)(13,0.377535364587383)(14,0.377535364587383)(15,0.377535364587383)(16,0.377535364587383)(17,0.327535364587383)(18,0.327535364587383)(19,0.327535364587383)(20,0.327535364587383)(21,0.427535364587383)(22,0.327535364587383)(23,0.377535364587383)(24,0.327535364587383)(25,0.377535364587383)(26,0.327535364587383)(27,0.327535364587383)(28,0.427535364587383)(29,0.377535364587383)(30,0.377535364587383)
+};
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[
+yticklabel style={/pgf/number format/fixed},
+ylabel={$\beta_5$},
+xmin=1, xmax=30,
+ymin=-0.5, ymax=0.5,
+grid=both,	      
+scaled y ticks = false,		
+grid style={line width=.1pt, draw=gray!10},
+width=14cm,height=3cm,
+xtick={0,5,10,15,20,25,30},
+ytick={-0.5,-0.25,0,0.25,0.5},
+thick
+]
+
+\addplot[color=Maroon]
+coordinates {
+(1,-0.0393534392859444)(2,0.223391221365688)(3,0.223391221365688)(4,0.223391221365688)(5,0.223391221365688)(6,0.223391221365688)(7,0.225515923513374)(8,0.225515923513374)(9,0.225515923513374)(10,0.225515923513374)(11,0.225515923513374)(12,0.0640220444938637)(13,0.0640220444938637)(14,0.0640220444938637)(15,0.0640220444938637)(16,0.0140220444938637)(17,0.0640220444938637)(18,0.0640220444938637)(19,0.0640220444938637)(20,0.0640220444938637)(21,0.0640220444938637)(22,0.114022044493864)(23,0.0640220444938637)(24,0.114022044493864)(25,0.0640220444938637)(26,0.114022044493864)(27,0.114022044493864)(28,0.0640220444938637)(29,0.114022044493864)(30,0.0640220444938637)
+};
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[
+yticklabel style={/pgf/number format/fixed},
+xlabel={Generation},
+ylabel={$\beta_6$},
+xmin=1, xmax=30,
+ymin=0, ymax=1,
+grid=both,	      
+scaled y ticks = false,		
+grid style={line width=.1pt, draw=gray!10},
+width=14cm,height=3cm,
+xtick={0,5,10,15,20,25,30},
+ytick={0,0.25,0.5,0.75,1},
+thick
+]
+
+\addplot[color=Maroon]
+coordinates {
+(1,0.968838961699090)(2,0.946212413407763)(3,0.946212413407763)(4,0.946212413407763)(5,0.946212413407763)(6,0.946212413407763)(7,0.444870432050475)(8,0.494870432050475)(9,0.494870432050475)(10,0.494870432050475)(11,0.544870432050475)(12,0.390908636004713)(13,0.390908636004713)(14,0.490908636004713)(15,0.490908636004713)(16,0.440908636004713)(17,0.490908636004713)(18,0.490908636004713)(19,0.490908636004713)(20,0.490908636004713)(21,0.490908636004713)(22,0.440908636004713)(23,0.490908636004713)(24,0.440908636004713)(25,0.490908636004713)(26,0.440908636004713)(27,0.440908636004713)(28,0.490908636004713)(29,0.390908636004713)(30,0.490908636004713)
+};
+\end{axis}
+\end{tikzpicture}
+\caption{Genetic Algorithm -- Generalized Bouc-Wen Model (Random crossover)}
+\label{fig:ga_gen_rand}
+\end{figure}
+
+The final values found for each parameter using the Genetic Algorithm approach
+with the random crossover strategy are displayed in Table~\ref{tab:ga_gen_values_r}.
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l c c c c c c c c}
+	\toprule
+	\textbf{Parameter}		& $A$		& $\alpha$	& $\beta_1$	& $\beta_2$ & $\beta_3$	& $\beta_4$ & $\beta_5$ & $\beta_6$		\\ \midrule
+	\textbf{Final value}	& $0.1$	& $0.9750$	& $0.0685$ & $0.5$ & $0.3753$	& $0.3775$	& $0.0640$	& $0.4909$	\\
+	\bottomrule
+\end{tabular}
+\caption{Random Crossover -- Final values (Generalized Bouc-Wen model)}
+\label{tab:ga_gen_values_r}
+\end{table}
+
+
+% weighted crossover - generalized bw model
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},	
+	ylabel={A},
+	xmin=1, xmax=30,
+	ymin=1.5, ymax=1.7,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={1.5,1.55,1.6,1.65,1.7},
+	thick]
+	\addplot[color=Maroon]
+	coordinates {
+(1,1.64009787169959)(2,1.64009787169959)(3,1.64009787169959)(4,1.64009787169959)(5,1.64009787169959)(6,1.64009787169959)(7,1.59009787169959)(8,1.64009787169959)(9,1.64009787169959)(10,1.64009787169959)(11,1.64009787169959)(12,1.64009787169959)(13,1.64009787169959)(14,1.64009787169959)(15,1.64009787169959)(16,1.64009787169959)(17,1.64009787169959)(18,1.59009787169959)(19,1.54009787169959)(20,1.54009787169959)(21,1.54009787169959)(22,1.64009787169959)(23,1.64009787169959)(24,1.64009787169959)(25,1.64009787169959)(26,1.64009787169959)(27,1.64009787169959)(28,1.64009787169959)(29,1.64009787169959)(30,1.64009787169959)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\alpha$},
+	xmin=1, xmax=30,
+	ymin=0.9, ymax=1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.9,0.925,0.95,0.975,1},
+	thick
+	]
+	
+	\addplot[
+	color=Maroon
+	]
+	coordinates {
+(1,0.981296401853448)(2,0.981296401853448)(3,0.981296401853448)(4,0.981296401853448)(5,0.981296401853448)(6,0.990000000000000)(7,0.990000000000000)(8,0.990000000000000)(9,0.990000000000000)(10,0.990000000000000)(11,0.990000000000000)(12,0.990000000000000)(13,0.990000000000000)(14,0.990000000000000)(15,0.990000000000000)(16,0.990000000000000)(17,0.990000000000000)(18,0.990000000000000)(19,0.990000000000000)(20,0.990000000000000)(21,0.990000000000000)(22,0.990000000000000)(23,0.990000000000000)(24,0.990000000000000)(25,0.990000000000000)(26,0.990000000000000)(27,0.990000000000000)(28,0.990000000000000)(29,0.990000000000000)(30,0.990000000000000)
+	};
+	
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_1$},
+	xmin=1, xmax=30,
+	ymin=0.3, ymax=0.5,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.3,0.35,0.4,0.45,0.5},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.335200906831924)(2,0.335200906831924)(3,0.385200906831924)(4,0.335200906831924)(5,0.335200906831924)(6,0.435200906831924)(7,0.435200906831924)(8,0.435200906831924)(9,0.435200906831924)(10,0.435200906831924)(11,0.435200906831924)(12,0.435200906831924)(13,0.435200906831924)(14,0.385200906831924)(15,0.485200906831924)(16,0.485200906831924)(17,0.385200906831924)(18,0.485200906831924)(19,0.485200906831924)(20,0.485200906831924)(21,0.485200906831924)(22,0.485200906831924)(23,0.485200906831924)(24,0.485200906831924)(25,0.385200906831924)(26,0.485200906831924)(27,0.485200906831924)(28,0.385200906831924)(29,0.435200906831924)(30,0.435200906831924)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_2$},
+	xmin=1, xmax=30,
+	ymin=0, ymax=0.5,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0,0.125,0.5,0.375,0.5},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.169549755213670)(2,0.169549755213670)(3,0.169549755213670)(4,0.169549755213670)(5,0.169549755213670)(6,0.434227178406584)(7,0.434227178406584)(8,0.434227178406584)(9,0.434227178406584)(10,0.434227178406584)(11,0.434227178406584)(12,0.434227178406584)(13,0.434227178406584)(14,0.384227178406584)(15,0.484227178406584)(16,0.484227178406584)(17,0.384227178406584)(18,0.500000000000000)(19,0.484227178406584)(20,0.500000000000000)(21,0.500000000000000)(22,0.500000000000000)(23,0.384227178406584)(24,0.384227178406584)(25,0.384227178406584)(26,0.384227178406584)(27,0.484227178406584)(28,0.384227178406584)(29,0.384227178406584)(30,0.384227178406584)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_3$},
+	xmin=1, xmax=30,
+	ymin=0, ymax=0.4,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0,0.1,0.2,0.3,0.4},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.292135220884937)(2,0.292135220884937)(3,0.292135220884937)(4,0.292135220884937)(5,0.242135220884937)(6,0.0109556696552213)(7,0.0109556696552213)(8,0.0609556696552213)(9,0.0109556696552213)(10,0.0109556696552213)(11,0.0109556696552213)(12,0.0609556696552213)(13,0.0609556696552213)(14,0.0609556696552213)(15,0.0609556696552213)(16,0.0609556696552213)(17,0.0609556696552213)(18,0.0609556696552213)(19,0.0609556696552213)(20,0.110955669655221)(21,0.110955669655221)(22,0.110955669655221)(23,0.110955669655221)(24,0.110955669655221)(25,0.0609556696552213)(26,0.0609556696552213)(27,0.0609556696552213)(28,0.110955669655221)(29,0.110955669655221)(30,0.110955669655221)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_4$},
+	xmin=1, xmax=30,
+	ymin=-0.2, ymax=0.2,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.2,-0.1,0,0.1,0.2},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,-0.0718640159281633)(2,-0.0718640159281633)(3,-0.0718640159281633)(4,-0.0718640159281633)(5,-0.0718640159281633)(6,0.000777359931312296)(7,0.000777359931312296)(8,0.000777359931312296)(9,0.000777359931312296)(10,-0.0492226400686877)(11,-0.0492226400686877)(12,0.000777359931312296)(13,0.000777359931312296)(14,0.000777359931312296)(15,0.000777359931312296)(16,0.000777359931312296)(17,0.000777359931312296)(18,0.000777359931312296)(19,0.000777359931312296)(20,-0.0492226400686877)(21,-0.0492226400686877)(22,-0.0492226400686877)(23,0.0507773599313123)(24,0.000777359931312296)(25,0.000777359931312296)(26,0.100777359931312)(27,0.0507773599313123)(28,-0.0492226400686877)(29,0.000777359931312296)(30,0.000777359931312296)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_5$},
+	xmin=1, xmax=30,
+	ymin=0, ymax=0.2,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0,0.05,0.1,0.15,0.2},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.00194303788602943)(2,0.00194303788602943)(3,0.00194303788602943)(4,0.00194303788602943)(5,0.174821464405275)(6,0.174821464405275)(7,0.174821464405275)(8,0.174821464405275)(9,0.174821464405275)(10,0.174821464405275)(11,0.174821464405275)(12,0.174821464405275)(13,0.174821464405275)(14,0.174821464405275)(15,0.174821464405275)(16,0.174821464405275)(17,0.174821464405275)(18,0.174821464405275)(19,0.174821464405275)(20,0.174821464405275)(21,0.174821464405275)(22,0.174821464405275)(23,0.174821464405275)(24,0.174821464405275)(25,0.124821464405275)(26,0.124821464405275)(27,0.124821464405275)(28,0.124821464405275)(29,0.174821464405275)(30,0.174821464405275)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	xlabel={Generation},
+	ylabel={$\beta_6$},
+	xmin=1, xmax=30,
+	ymin=0.1, ymax=0.3,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.1,0.15,0.2,0.25,0.3},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.240120322494038)(2,0.240120322494038)(3,0.240120322494038)(4,0.240120322494038)(5,0.190120322494038)(6,0.240120322494038)(7,0.240120322494038)(8,0.240120322494038)(9,0.240120322494038)(10,0.140120322494038)(11,0.140120322494038)(12,0.240120322494038)(13,0.240120322494038)(14,0.240120322494038)(15,0.240120322494038)(16,0.240120322494038)(17,0.240120322494038)(18,0.240120322494038)(19,0.240120322494038)(20,0.240120322494038)(21,0.240120322494038)(22,0.240120322494038)(23,0.240120322494038)(24,0.190120322494038)(25,0.190120322494038)(26,0.190120322494038)(27,0.240120322494038)(28,0.240120322494038)(29,0.240120322494038)(30,0.240120322494038)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Genetic Algorithm -- Generalized Bouc-Wen Model (Weighted crossover)}
+	\label{fig:ga_gen_w}
+\end{figure}
+
+The final values found for each parameter using the Genetic Algorithm approach
+with the weighted crossover strategy are displayed in Table~\ref{tab:ga_gen_final_w}.
+
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l c c c c c c c c}
+		\toprule
+		\textbf{Parameter}		& $A$		& $\alpha$	& $\beta_1$	& $\beta_2$ & $\beta_3$	& $\beta_4$ & $\beta_5$ & $\beta_6$		\\ \midrule
+		\textbf{Final value}	& $1.6401$	& $0.99$	& $0.4352$ & $0.3842$ & $0.1110$	& $0.0007$	& $0.1748$	& $0.2401$	\\
+		\bottomrule
+	\end{tabular}
+	\caption{Weighted Crossover -- Final values (Generalized Bouc-Wen model)}
+	\label{tab:ga_gen_final_w}
+\end{table}
+
+
+% proportional crossover - generalized bw model
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},	
+	ylabel={A},
+	xmin=1, xmax=30,
+	ymin=0, ymax=1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0,0.25,0.5,0.75,1},
+	thick]
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.586789085025302)(2,0.0358967562890904)(3,0.176681141073827)(4,0.226681141073827)(5,0.226681141073827)(6,0.498384582712587)(7,0.498384582712587)(8,0.752873226193916)(9,0.449887946483127)(10,0.402546078770074)(11,0.600134245317030)(12,0.505770155753776)(13,0.650134245317030)(14,0.626394823971145)(15,0.607372852387976)(16,0.557936687198418)(17,0.619085169511363)(18,0.642805105513447)(19,0.642805105513447)(20,0.642805105513447)(21,0.682916787238431)(22,0.656879509464287)(23,0.656879509464287)(24,0.656879509464287)(25,0.660121724504005)(26,0.678221309937812)(27,0.670896376330679)(28,0.670896376330679)(29,0.650698320273573)(30,0.648436342261247)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\alpha$},
+	xmin=1, xmax=30,
+	ymin=0.8, ymax=1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.8,0.85,0.9,0.95,1},
+	thick
+	]
+	
+	\addplot[
+	color=Maroon
+	]
+	coordinates {
+(1,0.986672283249516)(2,0.922382834644631)(3,0.922382834644631)(4,0.922382834644631)(5,0.972382834644631)(6,0.972382834644631)(7,0.972382834644631)(8,0.904239327301436)(9,0.940741403341614)(10,0.910797043828711)(11,0.932215557670407)(12,0.926649119672661)(13,0.882215557670407)(14,0.895428156016643)(15,0.924812943367856)(16,0.928617651796015)(17,0.930869249870665)(18,0.882215557670407)(19,0.932215557670407)(20,0.932215557670407)(21,0.926195919865785)(22,0.878837180255882)(23,0.928837180255882)(24,0.957482403154262)(25,0.928837180255882)(26,0.943482841695566)(27,0.944091666776735)(28,0.944091666776735)(29,0.990000000000000)(30,0.990000000000000)
+	};
+	
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_1$},
+	xmin=1, xmax=30,
+	ymin=0, ymax=0.5,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0,0.125,0.25,0.375,0.5},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.481372800365983)(2,0.147069795573228)(3,0.136260718301767)(4,0.136260718301767)(5,0.136260718301767)(6,0.136260718301767)(7,0.136260718301767)(8,0.128537139120550)(9,0.104097511498838)(10,0.119098283862123)(11,0.105177371117901)(12,0.144236883850152)(13,0.117738308344768)(14,0.148746149355357)(15,0.132795682152641)(16,0.121056019994579)(17,0.121008726058946)(18,0.130190517812153)(19,0.130190517812153)(20,0.130190517812153)(21,0.162316355897392)(22,0.0803979620655346)(23,0.105399371388921)(24,0.105399371388921)(25,0.0927992179601150)(26,0.122258455901548)(27,0.110217127205781)(28,0.110850745567709)(29,0.111216901386996)(30,0.114921697740118)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_2$},
+	xmin=1, xmax=30,
+	ymin=-0.5, ymax=0.5,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.5,-0.25,0,0.25,0.5},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.449916635667667)(2,0.0370768904468451)(3,0.0370768904468451)(4,0.0370768904468451)(5,0.0370768904468451)(6,0.0370768904468451)(7,0.0179811950636510)(8,0.0132517273186676)(9,-0.0129231095531549)(10,0.0370768904468451)(11,-0.0108671354937760)(12,-0.0102798748077285)(13,-0.0539189350355483)(14,-0.0212844051124743)(15,-0.0305969352720136)(16,-0.0486038760470906)(17,-0.0427156579064975)(18,-0.0262723796864142)(19,-0.00727762163018886)(20,-0.00727762163018886)(21,-0.0427285137498147)(22,-0.0265966897159562)(23,0.0234033102840438)(24,0.0234033102840438)(25,-0.0265966897159562)(26,-0.0310932226671911)(27,-0.0556519361527456)(28,-0.0556519361527456)(29,-0.0510474099686665)(30,0.0139143390935065)
+	};
+	\end{axis}
+	\end{tikzpicture}
+		\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_3$},
+	xmin=1, xmax=30,
+	ymin=0.1, ymax=0.3,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.1,0.15,0.2,0.25,0.3},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.161287143982303)(2,0.163062339392973)(3,0.213062339392973)(4,0.263062339392973)(5,0.263062339392973)(6,0.253902401387567)(7,0.253902401387567)(8,0.193606495353288)(9,0.169613129076818)(10,0.198322996529753)(11,0.198322996529753)(12,0.213875635945515)(13,0.207719095346517)(14,0.218852076837020)(15,0.212940684760854)(16,0.210169984852480)(17,0.284008343544958)(18,0.233880090278388)(19,0.233880090278388)(20,0.202760931297712)(21,0.184048212153045)(22,0.162631219662305)(23,0.173605174605402)(24,0.173605174605402)(25,0.177130106904538)(26,0.177942256892546)(27,0.178148074457517)(28,0.178148074457517)(29,0.178148074457517)(30,0.227407354518908)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_4$},
+	xmin=1, xmax=30,
+	ymin=-0.1, ymax=0.1,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.1,-0.05,0,0.05,0.1},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.0915330239914958)(2,-0.0122462477359733)(3,-0.0122462477359733)(4,-0.0122462477359733)(5,-0.0222613398910149)(6,-0.0222613398910149)(7,-0.0222613398910149)(8,-0.0488508504217125)(9,-0.00330106976743263)(10,-0.0267986032634243)(11,-0.0291235113607312)(12,-0.0114872011158797)(13,-0.0291235113607312)(14,-0.0251777415071699)(15,-0.0272074498192450)(16,-0.0272710184385404)(17,-0.0135955716171374)(18,0.0227289815614596)(19,-0.00189683988997794)(20,-0.0122375270670718)(21,0.0242856889792331)(22,-0.0270973777919590)(23,-0.0270973777919590)(24,-0.0270973777919590)(25,-0.0453666985431060)(26,0.0234238633158912)(27,0.0202741057465342)(28,0.0202740149828679)(29,0.0202739625322973)(30,0.0248547187303980)
+	};
+	\end{axis}
+	\end{tikzpicture}
+		\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_5$},
+	xmin=1, xmax=30,
+	ymin=0.1, ymax=0.3,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.1,0.15,0.2,0.25,0.3},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.272258898620322)(2,0.250257903080575)(3,0.250257903080575)(4,0.250257903080575)(5,0.250257903080575)(6,0.250257903080575)(7,0.250257903080575)(8,0.250257903080575)(9,0.250257903080575)(10,0.296889604644051)(11,0.248012550513676)(12,0.281067749871438)(13,0.230640106493696)(14,0.248268645200886)(15,0.189200445024400)(16,0.239203703439200)(17,0.199691934816109)(18,0.234526058412463)(19,0.234719180387835)(20,0.234719180387835)(21,0.234467563113400)(22,0.235133184343071)(23,0.260080534096181)(24,0.260080534096181)(25,0.197507625486695)(26,0.235002983494812)(27,0.214375305160957)(28,0.225515678611458)(29,0.246621699159725)(30,0.275515678611458)
+	};
+	\end{axis}
+	\end{tikzpicture}
+		\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	xlabel={Generation},
+	ylabel={$\beta_6$},
+	xmin=1, xmax=30,
+	ymin=0.6, ymax=1,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.6,0.7,0.8,0.9,1},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.672149142917568)(2,0.991003314089209)(3,0.991003314089209)(4,0.941003314089209)(5,0.941003314089209)(6,0.891003314089209)(7,0.891003314089209)(8,0.967302642542328)(9,0.993731174347446)(10,0.995484463686964)(11,0.996522717662297)(12,1)(13,0.996850477831198)(14,0.996162800454658)(15,0.998213845691092)(16,1)(17,0.997429483805097)(18,0.997466188251416)(19,0.997466188251416)(20,0.998501496294619)(21,0.997423784085688)(22,0.998658849148204)(23,0.998046374827855)(24,0.948046374827855)(25,0.998059459387019)(26,0.997501603002940)(27,1)(28,1)(29,0.998927113840961)(30,0.940570170219691)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Genetic Algorithm -- Generalized Bouc-Wen Model (Proportional crossover)}
+	\label{fig:ga_gen_prop}
+\end{figure}
+
+The final values found for each parameter using the Genetic Algorithm approach
+with the proportional crossover strategy are displayed in Table~\ref{tab:ga_gen_values}.
+
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l c c c c c c c c}
+		\toprule
+		\textbf{Parameter}		& $A$		& $\alpha$	& $\beta_1$	& $\beta_2$ & $\beta_3$	& $\beta_4$ & $\beta_5$ & $\beta_6$		\\ \midrule
+		\textbf{Final value}	& $0.6484$	& $0.99$	& $0.1149$ & $0.0139$ & $0.2274$	& $0.0248$	& $0.2755$	& $0.9405$	\\
+		\bottomrule
+	\end{tabular}
+	\caption{Proportional Crossover -- Final values (Generalized Bouc-Wen model)}
+	\label{tab:ga_gen_values}
+\end{table}
+
+As for the classic version of the Bouc-Wen model, it is possible to observe
+that for the random and weighted crossover strategies the individuals' chromosomes
+tend to sharply change between one value and another, as the set of possible values
+is that of the first generation~\footnote{
+Apart from eventual changes introduced by the mutation step at each generation.}.
+In fact, the proportional crossover strategy figures a smoother trend for all variables.
+
+Figure~\ref{fig:ga_gen_hys} shows how the hysteresis loop behaves using the final parameters of Table~\ref{tab:ga_gen_values}.
+With respect to Figure~\ref{fig:ga_classic_res}, a higher precision is appreciable
+thanks to the usage of the generalized hysteresis model.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{Images/ga_general_prop}
+	\caption{Hysteresis loop result -- Genetic Algorithm's parameters (generalized Bouc-Wen model, proportional crossover approach)}
+	\label{fig:ga_gen_hys}
+\end{figure}
+
+\subsubsection{Modified Firefly Algorithm -- Generalized Bouc-Wen Model}
+
+Table~\ref{tab:mfa_gen_params} contains the parameters used for the
+Modified Firefly Algorithm approach. 
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c}
+		\toprule
+		\textbf{Parameter} & \textbf{Value} \\ \toprule
+		$N$			& $10$ \\
+		$G$			& $30$ \\
+		$d$			& $8$  \\
+		$L$			& $\left[0, 0.7, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1\right]$ \\
+		$U$			& $\left[1.5, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5\right]$ \\ 
+		$a$			& $1.1$ \\
+		$b$			& $0.3$ \\ \bottomrule
+	\end{tabular}
+	\caption{Parameters for the Modified Firefly Algorithm approach -- Generalized Bouc-Wen model}
+	\label{tab:mfa_gen_params}
+\end{table}
+
+Figure~\ref{fig:mfa_gen_trend} shows the trend of generalized Bouc-Wen model
+parameters using the Modified Firefly Algorithm. The value of the best firefly
+for the specific generation is reported as the value outputted by the algorithm
+for that generation.
+
+It is also noticeable how the values initially tend to vary a lot,
+as the fireflies broadly explore the solution space during the first generations,
+and then proceed to refine the search around the fireflies
+with highest lightness factor (local exploitation).
+
+The hysteresis loop behaviour with the final parameters
+is displayed in Figure~\ref{fig:mfa_gen_hys}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{Images/mfa_gen_final}
+	\caption{Hysteresis loop result using Modified Firefly's parameters (generalized Bouc-Wen model)}
+	\label{fig:mfa_gen_hys}
+\end{figure}
+
+
+% MFA generalized trend
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},	
+	ylabel={A},
+	xmin=1, xmax=30,
+	ymin=0, ymax=1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0,0.25,0.5,0.75,1},
+	thick]
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.239722714509270)(2,0.599103518259375)(3,0.403620935467903)(4,0.672644134189034)(5,0.607817620647413)(6,0.479584136270727)(7,0.539718150016207)(8,0.539718150016207)(9,0.539718150016207)(10,0.532221807225624)(11,0.595551456138064)(12,0.595551456138064)(13,0.595551456138064)(14,0.595551456138064)(15,0.595551456138064)(16,0.595551456138064)(17,0.595551456138064)(18,0.595551456138064)(19,0.604928439081102)(20,0.604928439081102)(21,0.604928439081102)(22,0.604928439081102)(23,0.604928439081102)(24,0.604928439081102)(25,0.604928439081102)(26,0.604928439081102)(27,0.604928439081102)(28,0.604928439081102)(29,0.604928439081102)(30,0.604928439081102)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\alpha$},
+	xmin=1, xmax=30,
+	ymin=0.6, ymax=1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.6,0.7,0.8,0.9,1},
+	thick
+	]
+	
+	\addplot[
+	color=Maroon
+	]
+	coordinates {
+(1,0.728429668670103)(2,0.804203210919767)(3,0.824520958758779)(4,0.836505338012587)(5,0.840442019998904)(6,0.872518265507127)(7,0.939793685293131)(8,0.939793685293131)(9,0.939793685293131)(10,0.956674409272461)(11,0.985802469943453)(12,0.985802469943453)(13,0.985802469943453)(14,0.985802469943453)(15,0.985802469943453)(16,0.985802469943453)(17,0.985802469943453)(18,0.985802469943453)(19,0.986133844999196)(20,0.986133844999196)(21,0.986133844999196)(22,0.986133844999196)(23,0.986133844999196)(24,0.986133844999196)(25,0.986133844999196)(26,0.986133844999196)(27,0.986133844999196)(28,0.986133844999196)(29,0.986133844999196)(30,0.986133844999196)
+	};
+	
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_1$},
+	xmin=1, xmax=30,
+	ymin=0.4, ymax=0.6,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.4,0.45,0.5,0.55,0.6},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.499080976842225)(2,0.505180603765873)(3,0.414271520778804)(4,0.545954475722939)(5,0.471078169481341)(6,0.585451025200808)(7,0.572105147716796)(8,0.572105147716796)(9,0.572105147716796)(10,0.579243573278727)(11,0.592328138012960)(12,0.592328138012960)(13,0.592328138012960)(14,0.592328138012960)(15,0.592328138012960)(16,0.592328138012960)(17,0.592328138012960)(18,0.592328138012960)(19,0.584016355649755)(20,0.584016355649755)(21,0.584016355649755)(22,0.584016355649755)(23,0.584016355649755)(24,0.584016355649755)(25,0.584016355649755)(26,0.584016355649755)(27,0.584016355649755)(28,0.584016355649755)(29,0.584016355649755)(30,0.584016355649755)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_2$},
+	xmin=1, xmax=30,
+	ymin=-0.2, ymax=0.2,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.2,-0.1,0,0.1,0.52},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.163129713702679)(2,0.0538695700526970)(3,-0.0875140579124499)(4,0.126393982708388)(5,0.0731785392834269)(6,0.0669414706805447)(7,0.145001221050750)(8,0.145001221050750)(9,0.145001221050750)(10,0.118718642850213)(11,0.147010707303103)(12,0.147010707303103)(13,0.147010707303103)(14,0.147010707303103)(15,0.147010707303103)(16,0.147010707303103)(17,0.147010707303103)(18,0.147010707303103)(19,0.143471308481112)(20,0.143471308481112)(21,0.143471308481112)(22,0.143471308481112)(23,0.143471308481112)(24,0.143471308481112)(25,0.143471308481112)(26,0.143471308481112)(27,0.143471308481112)(28,0.143471308481112)(29,0.143471308481112)(30,0.143471308481112)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_3$},
+	xmin=1, xmax=30,
+	ymin=-0.5, ymax=0.5,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.5,-0.25,0,0.25,0.5},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,-0.0879647987047510)(2,0.218181685539358)(3,-0.00134177019226656)(4,0.113336425134232)(5,0.0165710539719599)(6,0.0561679929303269)(7,0.0521763755466545)(8,0.0521763755466545)(9,0.0521763755466545)(10,0.0422489067692850)(11,0.0115929080019365)(12,0.0115929080019365)(13,0.0115929080019365)(14,0.0115929080019365)(15,0.0115929080019365)(16,0.0115929080019365)(17,0.0115929080019365)(18,0.0115929080019365)(19,0.0134068930918946)(20,0.0134068930918946)(21,0.0134068930918946)(22,0.0134068930918946)(23,0.0134068930918946)(24,0.0134068930918946)(25,0.0134068930918946)(26,0.0134068930918946)(27,0.0134068930918946)(28,0.0134068930918946)(29,0.0134068930918946)(30,0.0134068930918946)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_4$},
+	xmin=1, xmax=30,
+	ymin=0.2, ymax=0.4,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.2,0.25,0.3,0.35,0.4},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.219602483845886)(2,0.366697231160561)(3,0.298787535003235)(4,0.367545304095982)(5,0.363450227067740)(6,0.363454605113127)(7,0.329262060005046)(8,0.329262060005046)(9,0.329262060005046)(10,0.309802533862957)(11,0.322418967762391)(12,0.322418967762391)(13,0.322418967762391)(14,0.322418967762391)(15,0.322418967762391)(16,0.322418967762391)(17,0.322418967762391)(18,0.322418967762391)(19,0.334083300066931)(20,0.334083300066931)(21,0.334083300066931)(22,0.334083300066931)(23,0.334083300066931)(24,0.334083300066931)(25,0.334083300066931)(26,0.334083300066931)(27,0.334083300066931)(28,0.334083300066931)(29,0.334083300066931)(30,0.334083300066931)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_5$},
+	xmin=1, xmax=30,
+	ymin=-0.2, ymax=0.2,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.2,-0.1,0,0.1,0.2},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,-0.0143745560760625)(2,0.0704098188011883)(3,-0.0435970414999130)(4,0.00163969132816741)(5,-0.168350654551373)(6,0.0748959275178980)(7,0.0864157946524996)(8,0.0864157946524996)(9,0.0864157946524996)(10,0.0632604024743052)(11,0.0473459847516897)(12,0.0473459847516897)(13,0.0473459847516897)(14,0.0473459847516897)(15,0.0473459847516897)(16,0.0473459847516897)(17,0.0473459847516897)(18,0.0473459847516897)(19,0.0405385305601807)(20,0.0405385305601807)(21,0.0405385305601807)(22,0.0405385305601807)(23,0.0405385305601807)(24,0.0405385305601807)(25,0.0405385305601807)(26,0.0405385305601807)(27,0.0405385305601807)(28,0.0405385305601807)(29,0.0405385305601807)(30,0.0405385305601807)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	xlabel={Generation},
+	ylabel={$\beta_6$},
+	xmin=1, xmax=30,
+	ymin=-0.5, ymax=0.5,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.5,0.25,0,0.25,0.5},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,-0.0408684911700100)(2,0.288338955700592)(3,0.119379290581781)(4,0.359907497802918)(5,0.256628407789643)(6,0.492299086893167)(7,0.442698042043135)(8,0.442698042043135)(9,0.442698042043135)(10,0.460196090920927)(11,0.486763275977465)(12,0.486763275977465)(13,0.486763275977465)(14,0.486763275977465)(15,0.486763275977465)(16,0.486763275977465)(17,0.486763275977465)(18,0.486763275977465)(19,0.492414778303015)(20,0.492414778303015)(21,0.492414778303015)(22,0.492414778303015)(23,0.492414778303015)(24,0.492414778303015)(25,0.492414778303015)(26,0.492414778303015)(27,0.492414778303015)(28,0.492414778303015)(29,0.492414778303015)(30,0.492414778303015)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Modified Firefly Algorithm -- Generalized Bouc-Wen Model}
+	\label{fig:mfa_gen_trend}
+\end{figure}
+
+The final values found for each parameter using the Modified Firefly Algorithm approach
+are displayed in Table~\ref{tab:mfa_gen_values}.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l c c c c c c c c}
+		\toprule
+		\textbf{Parameter}		& $A$		& $\alpha$	& $\beta_1$	& $\beta_2$ & $\beta_3$	& $\beta_4$ & $\beta_5$ & $\beta_6$		\\ \midrule
+		\textbf{Final value}	& $0.6049$	& $0.9861$	& $0.5840$ & $0.1435$ & $0.0134$	& $0.3341$	& $0.0405$	& $0.4924$	\\
+		\bottomrule
+	\end{tabular}
+	\caption{Modified Firefly Algorithm -- Final values (Generalized Bouc-Wen model)}
+	\label{tab:mfa_gen_values}
+\end{table}
+
+\subsubsection{Particle Swarm Optimization -- Generalized Bouc-Wen Model}
+
+Table~\ref{tab:pso_gen_params} contains the parameters used for the
+Particle Swarm Optimization approach.
+The hysteresis loop behaviour with the final parameters is displayed
+in Figure~\ref{fig:pso_gen_final}.
+Figure~\ref{fig:pso_gen_trend} shows the trend of generalized Bouc-Wen model parameters
+using the Particle Swarm Optimization approach.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c}
+		\toprule
+		\textbf{Parameter} & \textbf{Value} \\ \toprule
+		$N$			& $10$ \\
+		$G$			& $30$ \\
+		$d$			& $8$  \\
+		$L$			& $\left[0, 0, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1\right]$ \\
+		$U$			& $\left[2, 0.9, 1, 1, 1, 1, 1, 1 \right]$ \\ 
+		$a$			& $2.1$ \\
+		$b$			& $0.6$ \\ 
+		$c_1$		& $2$	\\
+		$c_2$		& $2$	\\ 
+		$V_{max}$	& $\left[0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1\right]$ \\ \bottomrule
+	\end{tabular}
+	\caption{Parameters for the Particle Swarm Optimization approach -- Generalized Bouc-Wen model}
+	\label{tab:pso_gen_params}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\linewidth]{Images/pso_gen_final}
+	\caption{Hysteresis loop result using Particle Swarm Optimization parameters (generalized Bouc-Wen model)}
+	\label{fig:pso_gen_final}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},	
+	ylabel={A},
+	xmin=1, xmax=30,
+	ymin=1.6, ymax=2,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={1.6,1.7,1.8,1.9,2},
+	thick]
+	\addplot[color=Maroon]
+	coordinates {
+(1,1.79761151203321)(2,2)(3,1.87111132774023)(4,1.87111132774023)(5,1.87111132774023)(6,1.87111132774023)(7,1.87111132774023)(8,1.87111132774023)(9,1.87111132774023)(10,1.87111132774023)(11,1.87111132774023)(12,1.87111132774023)(13,1.87111132774023)(14,1.87111132774023)(15,1.87111132774023)(16,2)(17,2)(18,2)(19,2)(20,2)(21,2)(22,2)(23,2)(24,2)(25,2)(26,2)(27,2)(28,2)(29,2)(30,2)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\alpha$},
+	xmin=1, xmax=30,
+	ymin=0.6, ymax=1,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.6,0.7,0.8,0.9,1},
+	thick
+	]
+	
+	\addplot[
+	color=Maroon
+	]
+	coordinates {
+(1,0.759865547111675)(2,0.680147815008967)(3,0.990000000000000)(4,0.990000000000000)(5,0.990000000000000)(6,0.990000000000000)(7,0.990000000000000)(8,0.990000000000000)(9,0.990000000000000)(10,0.990000000000000)(11,0.990000000000000)(12,0.990000000000000)(13,0.990000000000000)(14,0.990000000000000)(15,0.990000000000000)(16,0.990000000000000)(17,0.990000000000000)(18,0.990000000000000)(19,0.990000000000000)(20,0.990000000000000)(21,0.990000000000000)(22,0.990000000000000)(23,0.990000000000000)(24,0.990000000000000)(25,0.990000000000000)(26,0.990000000000000)(27,0.990000000000000)(28,0.990000000000000)(29,0.990000000000000)(30,0.990000000000000)
+	};
+	
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_1$},
+	xmin=1, xmax=30,
+	ymin=0, ymax=0.5,
+	grid=both,
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0,0.125,0.25,0.375,0.5},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.163612892901600)(2,0.317489418613579)(3,0.456236491818980)(4,0.456236491818980)(5,0.456236491818980)(6,0.456236491818980)(7,0.456236491818980)(8,0.456236491818980)(9,0.456236491818980)(10,0.456236491818980)(11,0.456236491818980)(12,0.456236491818980)(13,0.456236491818980)(14,0.456236491818980)(15,0.456236491818980)(16,0.366897198955879)(17,0.366897198955879)(18,0.366897198955879)(19,0.366897198955879)(20,0.366897198955879)(21,0.366897198955879)(22,0.366897198955879)(23,0.366897198955879)(24,0.366897198955879)(25,0.366897198955879)(26,0.366897198955879)(27,0.366897198955879)(28,0.366897198955879)(29,0.366897198955879)(30,0.309562322949807)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_2$},
+	xmin=1, xmax=30,
+	ymin=-0.2, ymax=0.2,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.2,-0.1,0,0.1,0.52},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.164455554793160)(2,-0.100000000000000)(3,-0.100000000000000)(4,-0.100000000000000)(5,-0.100000000000000)(6,-0.100000000000000)(7,-0.100000000000000)(8,-0.100000000000000)(9,-0.100000000000000)(10,-0.100000000000000)(11,-0.100000000000000)(12,-0.100000000000000)(13,-0.100000000000000)(14,-0.100000000000000)(15,-0.100000000000000)(16,-0.100000000000000)(17,-0.100000000000000)(18,-0.100000000000000)(19,-0.100000000000000)(20,-0.100000000000000)(21,-0.100000000000000)(22,-0.100000000000000)(23,-0.100000000000000)(24,-0.100000000000000)(25,-0.100000000000000)(26,-0.100000000000000)(27,-0.100000000000000)(28,-0.100000000000000)(29,-0.100000000000000)(30,-0.100000000000000)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_3$},
+	xmin=1, xmax=30,
+	ymin=-0.5, ymax=0.5,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.5,-0.25,0,0.25,0.5},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.220984156136484)(2,-0.100000000000000)(3,-0.100000000000000)(4,-0.100000000000000)(5,-0.100000000000000)(6,-0.100000000000000)(7,-0.100000000000000)(8,-0.100000000000000)(9,-0.100000000000000)(10,-0.100000000000000)(11,-0.100000000000000)(12,-0.100000000000000)(13,-0.100000000000000)(14,-0.100000000000000)(15,-0.100000000000000)(16,-0.100000000000000)(17,-0.100000000000000)(18,-0.100000000000000)(19,-0.100000000000000)(20,-0.100000000000000)(21,-0.100000000000000)(22,-0.100000000000000)(23,-0.100000000000000)(24,-0.100000000000000)(25,-0.100000000000000)(26,-0.100000000000000)(27,-0.100000000000000)(28,-0.100000000000000)(29,-0.100000000000000)(30,-0.100000000000000)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_4$},
+	xmin=1, xmax=30,
+	ymin=-0.1, ymax=0.1,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-0.1,-0.05,0,0.05,0.1},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.0382242187526582)(2,-0.100000000000000)(3,-0.100000000000000)(4,-0.100000000000000)(5,-0.100000000000000)(6,-0.100000000000000)(7,-0.100000000000000)(8,-0.100000000000000)(9,-0.100000000000000)(10,-0.100000000000000)(11,-0.100000000000000)(12,-0.100000000000000)(13,-0.100000000000000)(14,-0.100000000000000)(15,-0.100000000000000)(16,-0.100000000000000)(17,-0.100000000000000)(18,-0.100000000000000)(19,-0.100000000000000)(20,-0.100000000000000)(21,-0.100000000000000)(22,-0.100000000000000)(23,-0.100000000000000)(24,-0.100000000000000)(25,-0.100000000000000)(26,-0.100000000000000)(27,-0.100000000000000)(28,-0.100000000000000)(29,-0.100000000000000)(30,-0.100000000000000)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	ylabel={$\beta_5$},
+	xmin=1, xmax=30,
+	ymin=0.8, ymax=1,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.8,-0.85,0.9,0.95,1},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.857797418753933)(2,0.883110501479002)(3,1)(4,1)(5,1)(6,1)(7,1)(8,1)(9,1)(10,1)(11,1)(12,1)(13,1)(14,1)(15,1)(16,1)(17,1)(18,1)(19,1)(20,1)(21,1)(22,1)(23,1)(24,1)(25,1)(26,1)(27,1)(28,1)(29,1)(30,1)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	yticklabel style={/pgf/number format/fixed},
+	xlabel={Generation},
+	ylabel={$\beta_6$},
+	xmin=1, xmax=30,
+	ymin=0.5, ymax=1,
+	grid=both,	      
+	scaled y ticks = false,		
+	grid style={line width=.1pt, draw=gray!10},
+	width=14cm,height=3cm,
+	xtick={0,5,10,15,20,25,30},
+	ytick={0.5,0.625,0.75,0.875,1},
+	thick
+	]
+	
+	\addplot[color=Maroon]
+	coordinates {
+(1,0.919048321968003)(2,1)(3,0.571300777361267)(4,0.571300777361267)(5,0.571300777361267)(6,0.571300777361267)(7,0.571300777361267)(8,0.571300777361267)(9,0.571300777361267)(10,0.571300777361267)(11,0.571300777361267)(12,0.571300777361267)(13,0.571300777361267)(14,0.571300777361267)(15,0.571300777361267)(16,0.561660614151037)(17,0.561660614151037)(18,0.561660614151037)(19,0.561660614151037)(20,0.561660614151037)(21,0.561660614151037)(22,0.561660614151037)(23,0.561660614151037)(24,0.561660614151037)(25,0.561660614151037)(26,0.561660614151037)(27,0.561660614151037)(28,0.561660614151037)(29,0.561660614151037)(30,0.554539257473428)
+	};
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Particle Swarm Optimization -- Generalized Bouc-Wen Model}
+	\label{fig:pso_gen_trend}
+\end{figure}
+
+The final values found for each parameter using the Particle Swarm Optimization approach
+are displayed in Table~\ref{tab:pso_gen_values}.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l c c c c c c c c}
+		\toprule
+		\textbf{Parameter}		& $A$		& $\alpha$	& $\beta_1$	& $\beta_2$ & $\beta_3$	& $\beta_4$ & $\beta_5$ & $\beta_6$		\\ \midrule
+		\textbf{Final value}	& $2$	& $0.99$	& $0.3096$ & $-0.1$ & $-0.1$	& $-0.1$	& $1$	& $0.5545$	\\
+		\bottomrule
+	\end{tabular}
+	\caption{Particle Swarm Optimization -- Final values (Generalized Bouc-Wen model)}
+	\label{tab:pso_gen_values}
+\end{table}
 
 \subsection{Time Comparison}
 \label{sec:5.comparison_time}
+
+In order to be relevant, timing comparisons among the algorithms previously described
+have to be made with the same number of individuals in the population.
+This ensures impartiality between them when it comes to ranking the algorithms
+for performance.
+
+Each algorithm has been thus ran with a variable number of candidate solutions of
+10, 20 and 30, and the total execution time has been recorded.
+For each algorithm and each number of candidate solutions,
+a average execution time per generation is presented. The intent
+is to rank them by execution time and relative precision.
+
+Table~\ref{tab:timing} displays the differences in execution times
+for all algorithms with different numbers of individuals in the population.
+The number of generations/iterations has been set to 30 for all algorithms.
+
+For the Genetic Algorithm approach, it has been observed that the crossover
+strategy chosen does not affect the execution time. For this reason
+the values presented in the table refer to execution times obtained
+with the proportional crossover method.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c c}
+		\toprule
+		\thead{ Number of \\ individuals}	&	\thead{ Algorithm}	&	\thead{ Total time \\ (Classic)}	& \thead{ Average Time \\ (Classic)}	& \thead{ Total Time \\ (Generalized)} &	\thead{ Average Time \\ (Generalized)}	\\
+		\midrule
+		10 	& GA	& 21.98 s	& 0.73 s	& 30.72 s	& 1.02 s	\\
+			& MFA	& 21.34 s	& 0.71 s	& 30.78 s	& 1.03 s	\\
+			& PSO	& 21.36 s	& 0.71 s	& 30.57 s	& 1.02 s	\\ \midrule
+		20	& GA	& 37.96 s	& 1.26 s	& 59.65 s	& 1.99 s	\\
+			& MFA	& 39.43 s	& 1.31 s	& 60.36 s	& 2.01 s	\\
+			& PSO	& 40.84 s	& 1.36 s	& 62.79 s	& 2.09 s	\\ \midrule
+		30	& GA	& 55.45 s	& 1.85 s	& 84.18 s	& 2.81 s	\\
+			& MFA	& 54.32 s	& 1.81 s	& 85.04 s	& 2.83 s	\\
+			& PSO	& 55.40 s	& 1.84 s	& 82.31 s	& 2.74 s	\\ \bottomrule
+	\end{tabular}
+\caption{Timing performance comparison among algorithms}
+\label{tab:timing}
+\end{table}
+
+Timing results of Table~\ref{tab:timing} must be compared also to the relative
+precision of the final solution proposed by each algorithm: as a matter of fact,
+in the case of the Genetic Algorithm method, a lower number of individuals 
+in the population brings timing results almost identical to those of the other two
+algorithms, but the precision heavily depend on the chromosomes of individuals
+that are generated initially. In the other two algorithms, the global exploration
+approach undertaken by the fireflies/particles make them wander faster across
+the solution space. Therefore, the lower number of individuals does not
+cause a lower precision as much.
+
+The timing performance of the three algorithms make them not suitable for online control.
+There may be an improvement in performance if the algorithms were implemented onto
+dedicated hardware, e.g. a single purpose processor or a video card programmed
+to faster calculate the evolution of individuals, or the movement of fireflies/particles.
+
+
+

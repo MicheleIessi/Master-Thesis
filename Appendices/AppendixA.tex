@@ -34,7 +34,7 @@ the wave given to the output valve is defined as follows.
 y' = 10 - y
 \end{align*}
 
-\begin{mylisting}[hbox,enhanced,drop shadow,label={alg:step_input_generation}]{Stair input generation}
+\begin{mylisting}[enhanced,drop shadow,label={alg:step_input_generation}]{Stair input generation}
 close all
 clc
 step = 1;	% Volts between two consecutive steps
@@ -50,19 +50,247 @@ y = [t y];
 \end{mylisting}
 
 
+\subsection{Reference Signal Generation}
+
+This script generates the reference signal used in the PID control
+as described in Section~\ref{sec:6.4.5kg} and~\ref{sec:6.7kg}.
+
+\begin{mylisting}[enhanced,drop shadow,label={alg:ref_signal_generation}]{Reference signal generation}
+close all
+clc
+total_time = 20;
+t = 1:0.1:20;
+amplitude = 10;
+bias = 30:
+frequency = 1; % Can be 1, 2, 3 rad/s
+ref = amplitude*sin(2*pi*frequency)+bias;
+\end{mylisting}
+
 \section{Optimization Algorithms}
+
+This Section contains the MATLAB code of the Genetic Algorithm,
+the Modified Firefly Algorithm and the Particle Swarm Optimization.
+For presentation purposes, some of the code has been split into separate functions.
 
 \subsection{Genetic Algorithm}
 
+\subsubsection{Algorithm Initialization}
+
+In the initialization step, all variables and parameters of all the algorithm
+are initialized. This step is also performed for the Modified Firefly Algorithm
+and the Particle Swarm Optimization approach.
+
+\begin{mylisting}[enhanced,drop shadow,label={alg:genetic_init}]{Genetic Algorithm initialization}
+% Population parameters
+n = 30;                   % Initial population size
+generations = 30;         % Number of generations
+d = 4;                    % Chromosome dimension
+Lb = [0.5 0.5 -0.5 -0.1]; % Parameters' lower bound
+Ub = [1 0.99 0.5 0.1];    % Parameters' upper bound
+% Genetic parameters
+crossover_mode = "PROPORTIONAL";
+p_crossover = 0.5;          % Probability of crossover
+p_mutation = 0.1;           % Probability of mutation
+mutation_magnitude = 0.05;  % Percentage of mutation
+% Population initialization
+pop = zeros(n,d);           % Population matrix
+mating_pool = zeros(n,d);   % Mating pool
+mating_pool_dim = 0;
+fit = zeros(n,1);           % Fit vector
+relative_fit = zeros(n,1);
+\end{mylisting}
+
+\subsubsection{Population Evaluation}
+
+\begin{mylisting}[enhanced,drop shadow,label={alg:population_eval}]{Population evaluation}
+for k=1:generations
+  best=zeros(1,generations);
+  for i=1:n
+  % Individual evaluation (code removed)	
+  [response,individual] = checkParameters(pop(i,:),Lb,Ub);
+  if response % Checking if values are inside the bounds
+    fit(i) = -1/sum((eval_points_out-eval_points_ref).^2);
+  else
+    pop(i,:) = individual; % Keep the old individual
+    fit(i) = -1/(sum((eval_points_out-eval_points_ref).^2)^5);
+  end
+  matingStep();
+  mutationStep();
+end
+\end{mylisting}
+
+\subsubsection{Parameter Checking for New Individuals}
+\begin{mylisting}[enhanced,drop shadow,label={alg:param_check}]{Parameter checking}
+function [response,individual] = checkParameters(individual,Lb,Ub)
+  response = true;
+  for i=1:length(Lb)
+    if individual(i)<Lb(i)
+      individual(i)=Lb(i);
+      response=false;
+    elseif individual(i)>Ub(i)
+      individual(i)=Ub(i);
+      response=false;
+    end
+  end
+end
+\end{mylisting}
+
+\subsubsection{Mating Step}
+\begin{mylisting}[enhanced,drop shadow,label={alg:mating}]{Mating step overview}
+function mating_pool = matingStep(mating_pool,mating_pool_dim,pop,fit,d,crossover_mode,cross_chance,p_crossover)
+  while mating_pool_dim < n
+    % Select individuals to mate until the mating pool is full
+    % The crossover process depends on the fitness value of the parents
+    [first,second] = getMatingPartners(pop,fit);
+    cross_chance = fit(first)/(fit(first)+fit(second));
+    [first_child,second_child] = getCrossoverFromParents(pop(first,:),pop(second,:),d,crossover_mode,cross_chance,p_crossover);
+    mating_pool(mating_pool_dim+1,:) = first_child;
+    mating_pool(mating_pool_dim+2,:) = second_child;
+    mating_pool_dim = mating_pool_dim+2;
+  end
+end
+\end{mylisting}
+
+\subsubsection{Mating Partners Selection}
+\begin{mylisting}[enhanced,drop shadow,label={alg:mating_selection}]{Mating partners selection}
+function [first,second] = getMatingPartners(pop,fit)
+  fit_copy = fit/sum(fit);
+  cumulative = 0;
+  index = 1;
+  while cumulative <= rand
+    cumulative = cumulative + fit_copy(index);
+    index = index + 1;
+  end
+  first = index;
+  % Repeating for second parent
+  fit_copy = fit;
+  fit_copy(index,:) = [];
+  fit_copy = fit_copy/sum(fit_copy);
+  index = 1;
+  cumulative = 0;
+  while cumulative <= rand
+    cumulative = cumulative + fit_copy(index);
+    index = index + 1;
+  end
+  second = index;
+  if(first == second)
+    second = second + 1;
+  end
+end	
+\end{mylisting}
+
+\subsubsection{Crossover}
+\begin{mylisting}[enhanced,drop shadow,label={alg:crossover}]{Mating partners selection}
+function [first_child,second_child] = getCrossoverFromParents(first,second,d,method,fit_first,p_crossover)
+  first_child = first;
+  second_child = second;
+  % Random and weighted crossover strategies omitted for presentation
+  if strcmp(method,"PROPORTIONAL")
+    for x=1:d
+      if rand>p_crossover
+        first_child(x)=fit_first*first(x)+(1-fit_first)*second(x);
+      end
+    end
+    for x=1:d
+      if rand>p_crossover
+        second_child(x)=fit_first*first(x)+(1-fit_first)*second(x);
+      end
+    end
+  end
+end
+\end{mylisting}
+
 \subsection{Modified Firefly Algorithm}
+
+
+
+\begin{mylisting}[enhanced,drop shadow,label={alg:fa_movement}]{Firefly evaluation and movement}
+for k = 1:generations
+  [lambda_0, sigma, rho] = update_params(k,a,b,generations);  
+  % Firefly evaluation omitted
+  % Firefly movement
+  for i=1:n
+    ff_i = ns(i,:);
+    ill_i = fit(i);
+    for j=1:n
+      if fit(j) > ill_i
+        r=sqrt(sum((ns(i,:)-ns(j,:)).^2));
+        lambda_ij = lambda_0 * exp(-sigma*r);
+        ns(i,:) = ns(i,:)+lambda_ij*(ns(j,:)-ns(i,:))+rho*(randn(1,d));
+        for par = 1:d
+          if ns(i,par)<Lb(par) 
+            ns(i,par)=Lb(par);
+          elseif ns(i,par)>Ub(par)
+            ns(i,par)=Ub(par);
+          end
+        end
+      end
+    end
+  end
+end
+\end{mylisting}
+
+\subsubsection{Firefly Algorithm Parameter Update}
+
+\begin{mylisting}[enhanced,drop shadow,label={alg:fa_update}]{Parameter update}
+function [lambda_0,sigma,rho]=update_params(k,a,b,generations)
+  lambda_0 = a-(a-b)*(1-k)/(1-generations);
+  sigma = 2*7^(-k/generations);
+  rho = 0.1*exp(-4.8*k/generations);
+end	
+\end{mylisting}
 
 \subsection{Particle Swarm Optimization}
 
+\subsubsection{Evaluation and Movement}
 
+\begin{mylisting}[enhanced,drop shadow,label={alg:pso}]{Particle Swarm Optimization algorithm}
+for k=1:max_iter
+  for i=1:n
+    % Evaluation step omitted
+    [pbest,pbest_fit,gbest,gbest_fit]=checkFit(pbest,gbest,pbest_fit,gbest_fit,fit,i,swarm);
+  end
+  % Movement step
+  w = (a-(a-b)*(k/max_iter));
+  for i=1:n
+    sum1 = c1*rand(1,d).*(pbest(i,:)-swarm(i,:));
+    sum2 = c2*rand().*(gbest(1,:)-swarm(i,:));
+    speed(i,:)=w*speed(i,:)+sum1+sum2;
+    for j=1:d
+      if speed(j)>Vmax(j)
+        speed(j)=Vmax(j);
+      end
+    end
+    swarm(i,:)=swarm(i,:)+speed(i,:);
+    for j=1:d
+      if swarm(i,j)<Lb(j)
+        swarm(i,j)=Lb(j);
+      elseif swarm(i,j)>Ub(j)
+        swarm(i,j)=Ub(j);
+      end
+    end
+  end
+end
+\end{mylisting}
 
+\subsubsection{Fit Checking for Particles}
 
+This function check if a particle has bested his own personal best,
+or the global best of the entire population.
 
-
+\begin{mylisting}[enhanced,drop shadow,label={alg:pso}]{PSO fit checking}
+function [pbest,pbest_fit,gbest,gbest_fit] = checkFit(pbest,gbest,pbest_fit,gbest_fit,fit,i,swarm)
+  gbest=gbest;
+  if fit>pbest_fit(1,i)
+    pbest_fit(1,i)=fit;
+    pbest(i,:)=swarm(i,:);
+    if fit>gbest_fit
+      gbest=swarm(i,:);
+      gbest_fit=fit;
+    end
+  end
+end
+\end{mylisting}
 
 
 

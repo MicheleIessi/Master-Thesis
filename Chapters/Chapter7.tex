@@ -1,2 +1,52 @@
-\chapter{Conclusions and Future Work}
+\chapter{Conclusions and Future Developments}
 \label{ch:conclusion}
+
+McKibben muscles have proven to be of large utility in many fields,
+such as rehabilitation, training and actuation of small scale machinery.
+
+The use of tap water as a medium to raise the internal pressure of this kind of muscles
+has many advantages: being oil free, they are naturally environment-friendly. Moreover,
+the use of water instead of oil makes them safer to use in specific situations.
+
+However, there are drawbacks: water brings problems such as cavitation,
+and its lower viscosity makes it harder to control. Furthermore, the McKibben
+artificial muscle present a hysteretic behaviour that need to be accounted for
+to achieve good control performance.
+
+In this dissertation, the Bouc-Wen model of hysteresis has been proposed
+to model the hysteresis of the muscle. This allows to get a very simple,
+yet precise model that can be easily controlled using techniques like PID
+or MPC control. The Bouc-Wen model has been proposed both in its standard form,
+that has been referred as \emph{classic}, and a \emph{generalized} form.
+Both versions can express a hysteretic behaviour by use of several
+parameters: 4 in case of the classic model, and 8 in case of the generalized one.
+
+Finding these parameters to precisely model a given hysteresis is a hard matter.
+While values can be cherry-picked, to achieve highest grades of precision
+different methods are needed. In this work, three distinct approaches
+have been studied and developed: a Genetic Algorithm, that falls in the category
+of Evolutionary Algorithms and that mimics the natural evolution that permeates our world.
+Secondly, the Firefly Algorithm that mimics the behaviour of fireflies in the wild,
+in its modified version. Lastly, a Particle Swarm Optimization approach where
+candidate solutions, called particles, are flown into the solution space and evaluate
+it trying to find a global optimum. These last two approaches fall into the category
+of Metaheuristic Optimization algorithms.
+
+By using these algorithms it has been showed that it is possible to find parameters
+that allow to find a good fit for the hysteresis loop.
+Execution times have also been studied to provide a relative rank by timing performance.
+This kind of algorithm may be embedded on dedicated hardware
+to further speed up the process. This approach may be used
+to find parameters for other models and other applications, for example using it
+to identify the best gains for a PID controller.
+
+\section{Future Work}
+
+Future work includes:
+
+\begin{itemize}[noitemsep]
+	\item Development of Model Predictive Control with the McKibben artificial muscle
+	\item Implementation of other Evolutionary Algorithm approaches applied to muscle control
+	\item Extension of functionality to the Genetic Algorithm approach to better model the tournament, crossover and mutation steps
+	\item Addition of features to the Particle Swarm Optimization approach to attain higher versatility
+\end{itemize}

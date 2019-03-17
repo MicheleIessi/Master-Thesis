@@ -1,12 +1,11 @@
-close all
-clc
-step = 1;	% Volts between two consecutive steps
-y = zeros(1,50*10*(1/step));
-for v = 0:step:10
-	y((v*50)*(1/step)+1:(v+step)*(1/step)*50) = v;
+function [pbest,pbest_fit,gbest,gbest_fit] = checkFit(pbest,gbest,pbest_fit,gbest_fit,fit,i,swarm)
+  gbest=gbest;
+  if fit>pbest_fit(1,i)
+    pbest_fit(1,i)=fit;
+    pbest(i,:)=swarm(i,:);
+    if fit>gbest_fit
+      gbest=swarm(i,:);
+      gbest_fit=fit;
+    end
+  end
 end
-y = [y fliplr(y)];
-y = [y y y y]';
-last = (length(y)-1)/10;
-t = (0:0.1:last)';
-y = [t y];

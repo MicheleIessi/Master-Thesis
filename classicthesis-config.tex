@@ -32,10 +32,10 @@
 %----------------------------------------------------------------------------------------
 
 % Remove drafting to get rid of the '[ Date - classicthesis version 4.0 ]' text at the bottom of every page
-\PassOptionsToPackage{eulerchapternumbers,listings,drafting, pdfspacing, subfig,beramono,eulermath,parts}{classicthesis}
+\PassOptionsToPackage{eulerchapternumbers,listings, pdfspacing, subfig,beramono,eulermath,parts}{classicthesis}
 % Available options: drafting parts nochapters linedheaders eulerchapternumbers beramono eulermath pdfspacing minionprospacing tocaligned dottedtoc manychapters listings floatperchapter subfig
 
-\newcommand{\myTitle}{Modeling and Control of McKibben Artificial Muscle -- Application of Model Predictive Control, Genetic Algorithm and Metaheuristic Optimization\xspace}
+\newcommand{\myTitle}{Modeling and Control of McKibben Artificial Muscle -- Application of Genetic Algorithm and Metaheuristic Optimization\xspace}
 \newcommand{\mySubtitle}{}
 \newcommand{\myDegree}{Master's Degree in Computer and Systems Engineering}
 \newcommand{\myName}{Michele Iessi}
@@ -43,11 +43,11 @@
 \newcommand{\myOtherProf}{Put name here\xspace}
 \newcommand{\mySupervisor}{Kazuhisa Ito\xspace}
 \newcommand{\myFaculty}{\xspace}
-\newcommand{\myDepartment}{Department of Information Engineering, Computer Science and Mathemtics\xspace}
+\newcommand{\myDepartment}{Department of Information Engineering, Computer Science and Mathematics\xspace}
 \newcommand{\myUni}{University of L'Aquila\xspace}
 \newcommand{\myLocation}{L'Aquila, Italy\xspace}
-\newcommand{\myTime}{February 2019\xspace}
-\newcommand{\myVersion}{version 0.1\xspace}
+\newcommand{\myTime}{March 23 2019\xspace}
+\newcommand{\myVersion}{version 1.0\xspace}
 
 %----------------------------------------------------------------------------------------
 %	USEFUL COMMANDS
@@ -237,6 +237,7 @@ pdfproducer={LaTeX with hyperref and classicthesis}
 %----------------------------------------------------------------------------------------
 
 \usepackage{classicthesis} 
+\usepackage[left=1.5in,right=1.2in,top=1in,bottom=1in]{geometry}
 
 %----------------------------------------------------------------------------------------
 %	CHANGING TEXT AREA 
@@ -331,3 +332,4 @@ pdfproducer={LaTeX with hyperref and classicthesis}
 \usepackage{varwidth}
 \usepackage{pgfplots}
 \usepackage{wrapfig}
+\usepackage{makecell}

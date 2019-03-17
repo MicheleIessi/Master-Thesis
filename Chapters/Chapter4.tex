@@ -219,17 +219,17 @@ The result is shown in Equation~\ref{eq:F_final_thickness}.
 	\label{eq:F_final_thickness}
 \end{align}
 
-\subsection{Static Model Validation}
-
-% TODO: Describe the system used for testing and identification
-
-It is possible to validate the static model obtained. Stepwise voltage is applied
-to the input and output proportional valves, to study the behaviour of the muscle
-under quasi static conditions.
-
-{\color{red}(Aggiungere validazione del modello con enfasi sull'errore derivante attriti e approssimazioni)}
-
-\clearpage
+%\subsection{Static Model Validation}
+%
+%% TODO: Describe the system used for testing and identification
+%
+%It is possible to validate the static model obtained. Stepwise voltage is applied
+%to the input and output proportional valves, to study the behaviour of the muscle
+%under quasi static conditions.
+%
+%{\color{red}(Aggiungere validazione del modello con enfasi sull'errore derivante attriti e approssimazioni)}
+%
+%\clearpage
 
 \section{Muscle Model Based on System Identification}
 
@@ -280,7 +280,7 @@ By plotting this data with pressure on the x-axis and displacement on the y-axis
 it is possible to notice the hysteretic behaviour of the muscle,
 as shown in Figure~\ref{fig:hysteresis_plot}.
 
-\begin{figure}[H]
+\begin{figure}[]
 	\centering
 	\includegraphics[width=\linewidth]{"Images/hysteresis_plot"}
 	\caption[Pressure and displacement characteristic]{Pressure and displacement characteristic - Hysteresis plot}
@@ -378,7 +378,7 @@ some kind of black-box modeling, keeping relevant
 input-output information that is useful for characterization,
 design and control purposes.
 
-{\color{red}Aggiungere descrizione dettagliata isteresi e introdurre cosa si leggerà in seguito}
+%TODO: Aggiungere descrizione dettagliata isteresi e introdurre cosa si leggerà in seguito
 
 \section{Models of Hysteresis}
 
@@ -651,3 +651,15 @@ the classic Bouc-Wen model of hysteresis is shown in Figure~\ref{fig:comp_classi
 	\caption{Comparison between experimental data and simulated output with generalized Bouc-Wen model}
 	\label{fig:comp_gener}
 \end{figure}
+
+
+\section{Weight Change Tolerance}
+
+Studies~\cite{kobayashi2014displacement}~\cite{kobayashi2015displacement}
+~\cite{kobayashi2013development} have been done to verify how the model
+obtained for a specific muscle mutates as the load applied is changed. 
+
+The result is that the parameters of the Bouc-Wen model of hysteresis
+obtained for a specific weight can be used for other weights with little to no
+error in estimation. The results are not re-proposed nor replicated here
+as it would diverge from the purpose of this dissertation.

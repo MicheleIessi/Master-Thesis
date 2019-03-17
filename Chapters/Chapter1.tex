@@ -41,13 +41,14 @@ other actuators.
 \section{Modeling of McKibben Artificial Muscle}
 
 As already mentioned, the control of McKibben muscles is not easy to achieve.
-A PID control solution may be developed, but it has flaws:
+A PID control solution has been developed, although it has flaws:
 the parameters of the controller will have to be tuned different types of muscles
 and for various loads. 
-This is generally not an acceptable solution for this kind of application.
 
-Thus, model-based control techniques are better suitable for this job. The plant model
-needs to be very precise for the control to be effective, and to do so identification techniques are used to get a first linear approximation of the model.
+Model-based control techniques are better suitable for this job,
+but harder to develop. The plant model needs to be very precise
+for the control to be effective, and to do so identification techniques
+are used to get a first linear approximation of the model.
 Later, a hysteresis component is added to this linear model, to keep track of the
 nonlinearities added by the hysteretic behaviour of the muscle.
 Adding a hysteresis component to a linear model makes it more complex, 
@@ -57,8 +58,7 @@ good control performance.
 This allows to get a model having good fit with respect to the real one.
 After this, it is possibly to try applying a model-based control approach,
 namely the \textbf{Model Predictive Control} (MPC).
-Further details about the development of controllers are in Chapter~\ref{Chapter6},
-and the theory behind MPC can be found in Appendix~\ref{app:mpc}.
+Further details about the development of controllers are in Chapter~\ref{ch:control}.
 
 \section{Aim of the Study}
 
@@ -66,7 +66,7 @@ The aim of this dissertation is to get precise control of the displacement for
 a tap water-driven McKibben artificial muscle. To do so, a list of steps will be followed:
 
 \begin{enumerate}
-	\item \textit{Derivation of a simple linear model} \smallskip \\ 
+	\item \textit{Derivation of a simple model} \smallskip \\ 
 	Using linear identification techniques, it is possible to map the input pressure to the output displacement,
 	and get a precise yet simple linear model of the muscle.
 	While in pneumatic artificial muscles it is required to take into account
@@ -88,10 +88,12 @@ a tap water-driven McKibben artificial muscle. To do so, a list of steps will be
 	so that it is possible to make use of a precise plant model in a model-based control.
 	
 	\item \textit{Controller Design} \smallskip \\
-	The application of Proportional-Integrative and Model Predictive Control
+	The application of Proportional-Integrative Control and Model Predictive Control
 	techniques are proposed, using the muscle model obtained from
 	linear system identification and modified with the introduction
 	of the hysteresis component.
+	
+	
 	
 \end{enumerate}
 
